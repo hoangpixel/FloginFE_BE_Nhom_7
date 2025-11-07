@@ -1,0 +1,11 @@
+com\flogin\entity\AuthUser.class
+com\flogin\Application.class
+com\flogin\controller\ProductController.class
+com\flogin\entity\Product.class
+com\flogin\repository\AuthUserRepository.class
+com\flogin\repository\ProductRepository.class
+com\flogin\dto\LoginResponse.class
+com\flogin\controller\AuthController.class
+com\flogin\dto\LoginRequest.class
+com\flogin\WebConfig.class
+com\flogin\WebConfig$1.class
