@@ -12,7 +12,6 @@ import com.flogin.repository.AuthUserRepository;
 
 @SpringBootApplication
 public class Application {
-
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
   }
@@ -22,12 +21,17 @@ public class Application {
     return new BCryptPasswordEncoder();
   }
 
+  // Seed 1 user nếu chưa có (cho dễ test)
   @Bean
-  CommandLineRunner seedUsers(AuthUserRepository repo, PasswordEncoder encoder) {
+  CommandLineRunner seed(AuthUserRepository repo, PasswordEncoder encoder) {
     return args -> {
-      repo.findByUsername("admin").orElseGet(() ->
-          repo.save(new AuthUser("admin", encoder.encode("123456"), "ADMIN"))
-      );
+      if (!repo.existsByUsername("admin")) {
+        AuthUser u = new AuthUser();
+        u.setUsername("admin");
+        u.setPasswordHash(encoder.encode("123456"));
+        repo.save(u);
+        System.out.println("Seeded admin/123456");
+      }
     };
   }
 }

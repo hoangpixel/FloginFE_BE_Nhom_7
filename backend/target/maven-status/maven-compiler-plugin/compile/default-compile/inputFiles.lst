@@ -1,9 +1,12 @@
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\Application.java
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\controller\AuthController.java
+C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\controller\CategoryController.java
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\controller\ProductController.java
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\dto\LoginRequest.java
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\dto\LoginResponse.java
+C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\dto\ProductRequest.java
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\entity\AuthUser.java
+C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\entity\Category.java
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\entity\Product.java
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\repository\AuthUserRepository.java
 C:\Users\mhoang ne\Desktop\FloginFE_BE_Nhom_7\backend\src\main\java\com\flogin\repository\ProductRepository.java

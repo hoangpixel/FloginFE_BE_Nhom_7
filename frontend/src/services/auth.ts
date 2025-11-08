@@ -1,9 +1,15 @@
 import api from '../lib/axios';
+import type { LoginRequest, LoginResponse } from '../types';
 
-export type LoginRequest = { username: string; password: string };
-export type LoginResponse = { token: string; username: string };
+export async function login(body: LoginRequest): Promise<LoginResponse> {
+  const { data } = await api.post<LoginResponse>('/auth/login', body);
+  // Lưu token/username để điều hướng và guard route
+  localStorage.setItem('token', data.token);
+  localStorage.setItem('username', data.username);
+  return data;
+}
 
-export async function login(data: LoginRequest): Promise<LoginResponse> {
-  const res = await api.post('/auth/login', data);
-  return res.data;
+export function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
 }

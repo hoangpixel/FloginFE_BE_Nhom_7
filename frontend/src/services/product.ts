@@ -1,19 +1,21 @@
 import api from '../lib/axios';
-
-export type Product = { id?: number; name: string; price: number };
+import type { Product, ProductPayload } from '../types';
 
 export async function getProducts(): Promise<Product[]> {
-  const { data } = await api.get('/products');
+  const { data } = await api.get<Product[]>('/products');
   return data;
 }
-export async function createProduct(p: Product): Promise<Product> {
-  const { data } = await api.post('/products', p);
+
+export async function createProduct(p: ProductPayload): Promise<Product> {
+  const { data } = await api.post<Product>('/products', p);
   return data;
 }
-export async function updateProduct(id: number, p: Product): Promise<Product> {
-  const { data } = await api.put(`/products/${id}`, p);
+
+export async function updateProduct(id: number, p: ProductPayload): Promise<Product> {
+  const { data } = await api.put<Product>(`/products/${id}`, p);
   return data;
 }
+
 export async function deleteProduct(id: number): Promise<void> {
   await api.delete(`/products/${id}`);
 }
