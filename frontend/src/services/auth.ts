@@ -1,15 +1,20 @@
 import api from '../lib/axios';
-import type { LoginRequest, LoginResponse } from '../types';
 
-export async function login(body: LoginRequest): Promise<LoginResponse> {
-  const { data } = await api.post<LoginResponse>('/auth/login', body);
-  // Lưu token/username để điều hướng và guard route
+type LoginReq = { username: string; password: string };
+type LoginRes = { token: string; username: string };
+
+export async function login(body: LoginReq): Promise<void> {
+  const res = await api.post<LoginRes>('/auth/login', body);
+  const data = res.data;
   localStorage.setItem('token', data.token);
   localStorage.setItem('username', data.username);
-  return data;
 }
 
 export function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('username');
+}
+
+export function isAuthed(): boolean {
+  return !!localStorage.getItem('token');
 }

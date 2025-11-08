@@ -21,16 +21,16 @@ public class Application {
     return new BCryptPasswordEncoder();
   }
 
-  // Seed 1 user nếu chưa có (cho dễ test)
+  // Seed 1 user admin/123456 nếu chưa có
   @Bean
-  CommandLineRunner seed(AuthUserRepository repo, PasswordEncoder encoder) {
+  CommandLineRunner seedAdmin(AuthUserRepository repo, PasswordEncoder encoder) {
     return args -> {
       if (!repo.existsByUsername("admin")) {
         AuthUser u = new AuthUser();
         u.setUsername("admin");
         u.setPasswordHash(encoder.encode("123456"));
         repo.save(u);
-        System.out.println("Seeded admin/123456");
+        System.out.println("Seeded user: admin/123456");
       }
     };
   }

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // để dùng axios.isAxiosError
 import { login } from '../services/auth';
+
+const USER_RE = /^[A-Za-z0-9._-]{3,50}$/;
+const PASS_RE = /^(?=.*[A-Za-z])(?=.*\d).{6,100}$/;
 
 export default function LoginPage() {
   const nav = useNavigate();
@@ -9,15 +13,35 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  function clientValidate(): string | null {
+    if (!USER_RE.test(username)) return 'Username 3–50, chỉ a-z A-Z 0-9 - . _';
+    if (!PASS_RE.test(password)) return 'Password 6–100 và phải có chữ & số';
+    return null;
+  }
+
+  function parseLoginError(err: unknown): string {
+    if (axios.isAxiosError(err)) {
+      const status = err.response?.status;
+      if (status === 400) return 'Sai định dạng username/password';
+      if (status === 401) return 'Sai username hoặc password';
+      // nếu backend trả message:
+      const msg = (err.response?.data as { message?: string } | undefined)?.message;
+      return msg ?? 'Có lỗi xảy ra. Thử lại sau.';
+    }
+    return 'Có lỗi xảy ra. Thử lại sau.';
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const v = clientValidate();
+    if (v) { setError(v); return; }
     setError(null);
     setLoading(true);
     try {
       await login({ username, password });
       nav('/products', { replace: true });
-    } catch {
-      setError('Sai username hoặc password');
+    } catch (err: unknown) {
+      setError(parseLoginError(err));
     } finally {
       setLoading(false);
     }
