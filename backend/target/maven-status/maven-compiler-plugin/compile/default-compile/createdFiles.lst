@@ -7,8 +7,10 @@ com\flogin\entity\Category.class
 com\flogin\entity\AuthUser.class
 com\flogin\controller\ProductController.class
 com\flogin\entity\Product.class
+com\flogin\exception\ApiExceptionHandler.class
 com\flogin\repository\AuthUserRepository.class
 com\flogin\repository\ProductRepository.class
+com\flogin\dto\ApiError.class
 com\flogin\controller\AuthController.class
 com\flogin\WebConfig.class
 com\flogin\WebConfig$1.class

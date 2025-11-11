@@ -28,9 +28,9 @@ public class Application {
       if (!repo.existsByUsername("admin")) {
         AuthUser u = new AuthUser();
         u.setUsername("admin");
-        u.setPasswordHash(encoder.encode("123456"));
+        u.setPasswordHash(encoder.encode("Test123"));
         repo.save(u);
-        System.out.println("Seeded user: admin/123456");
+        System.out.println("Seeded user: admin/Test123");
       }
     };
   }

@@ -19,3 +19,8 @@ export async function updateProduct(id: number, p: ProductPayload): Promise<Prod
 export async function deleteProduct(id: number): Promise<void> {
   await api.delete(`/products/${id}`);
 }
+
+export async function readProduct(id: number): Promise<Product> {
+  const { data } = await api.get<Product>(`/products/${id}`);
+  return data;
+}

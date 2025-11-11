@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API || 'http://localhost:8080/api',
-  timeout: 10000, // tránh chờ vô hạn
+  timeout: 10000,
 });
 
 api.interceptors.request.use((config) => {

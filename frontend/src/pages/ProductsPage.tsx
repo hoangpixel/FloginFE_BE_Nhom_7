@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCategories } from '../services/categories';
-import { createProduct, deleteProduct, getProducts, updateProduct } from '../services/product';
+import { createProduct, deleteProduct, getProducts, updateProduct} from '../services/product';
 import type { Product, ProductPayload, Category } from '../types';
 import { logout } from '../services/auth';
 import ProductDialog from '../components/ProductDialog';
+
+type DialogMode = 'create' | 'edit' | 'view';
 
 export default function ProductsPage() {
   const nav = useNavigate();
@@ -12,6 +14,7 @@ export default function ProductsPage() {
   const [items, setItems] = useState<Product[]>([]);
   const [openDlg, setOpenDlg] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
+  const [mode, setMode] = useState<DialogMode>('create');
   const user = useMemo(() => localStorage.getItem('username') ?? 'user', []);
 
   useEffect(() => {
@@ -27,7 +30,7 @@ export default function ProductsPage() {
     nav('/login', { replace: true });
   }
 
-  // Handler lưu của dialog (tạo hoặc sửa)
+  // Tạo hoặc sửa (tùy theo mode)
   async function handleSave(payload: ProductPayload) {
     if (editing) {
       const updated = await updateProduct(editing.id, payload);
@@ -36,6 +39,10 @@ export default function ProductsPage() {
       const created = await createProduct(payload);
       setItems(prev => [created, ...prev]);
     }
+    // đóng dialog sau khi lưu
+    setOpenDlg(false);
+    setEditing(null);
+    setMode('create');
   }
 
   async function onDelete(id: number) {
@@ -51,7 +58,7 @@ export default function ProductsPage() {
         <div className="flex items-center gap-3">
           <button
             className="px-3 py-2 rounded bg-black text-white"
-            onClick={() => { setEditing(null); setOpenDlg(true); }}
+            onClick={() => { setEditing(null); setMode('create'); setOpenDlg(true); }}
           >
             Thêm sản phẩm
           </button>
@@ -60,7 +67,6 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* List */}
       <table className="w-full border">
         <thead className="bg-gray-50">
           <tr>
@@ -83,7 +89,13 @@ export default function ProductsPage() {
               <td className="p-2 border text-center space-x-2">
                 <button
                   className="px-2 py-1 border rounded"
-                  onClick={() => { setEditing(p); setOpenDlg(true); }}
+                  onClick={() => { setEditing(p); setMode('view'); setOpenDlg(true); }}
+                >
+                  Xem
+                </button>
+                <button
+                  className="px-2 py-1 border rounded"
+                  onClick={() => { setEditing(p); setMode('edit'); setOpenDlg(true); }}
                 >
                   Edit
                 </button>
@@ -102,13 +114,13 @@ export default function ProductsPage() {
         </tbody>
       </table>
 
-      {/* Dialog */}
       <ProductDialog
         open={openDlg}
-        onClose={() => setOpenDlg(false)}
+        onClose={() => { setOpenDlg(false); setMode('create'); setEditing(null); }}
         onSave={handleSave}
         categories={categories}
         initial={editing}
+        mode={mode}
       />
     </div>
   );

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flogin.dto.ApiError;
 import com.flogin.dto.LoginRequest;
 import com.flogin.dto.LoginResponse;
 import com.flogin.repository.AuthUserRepository;
@@ -26,12 +27,24 @@ public class AuthController {
     this.repo = repo; this.encoder = encoder;
   }
 
-  @PostMapping("/login")
-  public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest req) {
-    return repo.findByUsername(req.getUsername())
-      .filter(u -> encoder.matches(req.getPassword(), u.getPasswordHash()))
-      .map(u -> ResponseEntity.ok(
-        new LoginResponse(UUID.randomUUID().toString(), u.getUsername())))
-      .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+@PostMapping("/login")
+public ResponseEntity<?> login(@Valid @RequestBody LoginRequest req) {
+  return repo.findByUsername(req.getUsername())
+      .filter(u -> matches(req.getPassword(), u.getPasswordHash()))
+      .<ResponseEntity<?>>map(u -> ResponseEntity.ok(
+          new LoginResponse(UUID.randomUUID().toString(), u.getUsername())))
+      .orElseGet(() -> {
+        ApiError err = new ApiError(401, "Unauthorized", "Invalid username or password");
+        err.setPath("/api/auth/login");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err);
+      });
+}
+
+  private boolean matches(String raw, String hash) {
+    if (hash == null) return false;
+    if (hash.startsWith("$2a$") || hash.startsWith("$2b$") || hash.startsWith("$2y$")) {
+      return encoder.matches(raw, hash); // BCrypt
+    }
+    return raw.equals(hash); // if DB stores plain text temporarily
   }
 }

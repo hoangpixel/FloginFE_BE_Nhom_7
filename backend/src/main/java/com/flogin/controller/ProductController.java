@@ -1,16 +1,26 @@
 package com.flogin.controller;
 
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.flogin.dto.ProductRequest;
 import com.flogin.entity.Category;
 import com.flogin.entity.Product;
 import com.flogin.repository.ProductRepository;
-import jakarta.validation.Valid;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Locale;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/products")
@@ -42,6 +52,13 @@ public class ProductController {
     repo.deleteById(id);
     return ResponseEntity.noContent().build();
   }
+
+  @GetMapping("/{id}")
+public ResponseEntity<Product> read(@PathVariable Long id) {
+  return repo.findById(id)
+      .map(ResponseEntity::ok)
+      .orElse(ResponseEntity.notFound().build());
+}
 
   private void fill(Product p, ProductRequest req) {
     p.setName(req.getName());
