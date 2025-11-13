@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "verbatimModuleSyntax": false,
+    "allowJs": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.{ts,tsx,js,jsx}"]
+}

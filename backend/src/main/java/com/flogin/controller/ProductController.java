@@ -69,10 +69,14 @@ public ResponseEntity<Product> read(@PathVariable Long id) {
   }
 
   private Category parseCategory(String raw) {
+    if (raw == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category là bắt buộc");
+    }
     try {
-      return Category.valueOf(raw.trim().toUpperCase(Locale.ROOT));
-    } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category không hợp lệ");
+    return Category.valueOf(raw.trim().toUpperCase(Locale.ROOT));
+    } catch (IllegalArgumentException ex) {
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category không hợp lệ");
     }
   }
+
 }

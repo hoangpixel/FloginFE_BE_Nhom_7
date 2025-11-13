@@ -1,50 +1,42 @@
 package com.flogin.controller;
 
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flogin.dto.ApiError;
 import com.flogin.dto.LoginRequest;
 import com.flogin.dto.LoginResponse;
-import com.flogin.repository.AuthUserRepository;
+import com.flogin.service.AuthService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-  private final AuthUserRepository repo;
-  private final PasswordEncoder encoder;
 
-  public AuthController(AuthUserRepository repo, PasswordEncoder encoder) {
-    this.repo = repo; this.encoder = encoder;
+  private final AuthService authService;
+
+  public AuthController(AuthService authService) {
+    this.authService = authService;
   }
 
-@PostMapping("/login")
-public ResponseEntity<?> login(@Valid @RequestBody LoginRequest req) {
-  return repo.findByUsername(req.getUsername())
-      .filter(u -> matches(req.getPassword(), u.getPasswordHash()))
-      .<ResponseEntity<?>>map(u -> ResponseEntity.ok(
-          new LoginResponse(UUID.randomUUID().toString(), u.getUsername())))
-      .orElseGet(() -> {
-        ApiError err = new ApiError(401, "Unauthorized", "Invalid username or password");
-        err.setPath("/api/auth/login");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err);
-      });
-}
+  @PostMapping("/login")
+  public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest req) {
+    LoginResponse res = authService.authenticate(req);
 
-  private boolean matches(String raw, String hash) {
-    if (hash == null) return false;
-    if (hash.startsWith("$2a$") || hash.startsWith("$2b$") || hash.startsWith("$2y$")) {
-      return encoder.matches(raw, hash); // BCrypt
+    if (res.isSuccess()) {
+      // Đăng nhập OK
+      return ResponseEntity.ok(res);
     }
-    return raw.equals(hash); // if DB stores plain text temporarily
+
+    // Phân loại lỗi để map status code “đúng REST”
+    String msg = res.getMessage();
+    if ("Username không tồn tại".equals(msg) || "Sai mật khẩu".equals(msg)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res); // 401
+    }
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);     // 400 (lỗi validate)
   }
 }

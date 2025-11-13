@@ -5,14 +5,14 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class LoginRequest {
-  @NotBlank(message = "username is required")
-  @Size(min = 3, max = 50, message = "username must be 3-50 chars")
-  @Pattern(regexp = "^[A-Za-z0-9._-]+$", message = "username only allows a-z A-Z 0-9 . _ -")
+  @NotBlank(message = "Không được để trống username")
+  @Size(min = 3, max = 50, message = "username phải có từ 3 đến 50 ký tự")
+  @Pattern(regexp = "^[A-Za-z0-9._-]+$", message = "username chỉ chấp nhận a-z A-Z 0-9 . _ -")
   private String username;
 
-  @NotBlank(message = "password is required")
-  @Size(min = 6, max = 100, message = "password must be 6-100 chars")
-  @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$", message = "password must contain letters and digits")
+  @NotBlank(message = "Không được để trống password")
+  @Size(min = 6, max = 100, message = "password phải có từ 6 đến 100 ký tự")
+  @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$", message = "password phải có ít nhất 1 chữ thường và hoa")
   private String password;
 
   public LoginRequest() {}

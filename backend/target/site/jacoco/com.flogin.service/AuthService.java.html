@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backend</a> &gt; <a href="index.source.html" class="el_package">com.flogin.service</a> &gt; <span class="el_source">AuthService.java</span></div><h1>AuthService.java</h1><pre class="source lang-java linenums">package com.flogin.service;
+
+import java.util.Set;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.flogin.dto.LoginRequest;
+import com.flogin.dto.LoginResponse;
+import com.flogin.entity.AuthUser;
+import com.flogin.repository.AuthUserRepository;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+
+@Service
+public class AuthService {
+  private final AuthUserRepository repo;
+  private final PasswordEncoder encoder;
+  private final Validator vali;
+
+<span class="fc" id="L25">  public AuthService(AuthUserRepository repo, PasswordEncoder encoder, Validator vali) {</span>
+<span class="fc" id="L26">    this.repo = repo; this.encoder = encoder; this.vali = vali;</span>
+<span class="fc" id="L27">  }</span>
+
+  private String firstViolation(LoginRequest req) {
+<span class="fc" id="L30">    Set&lt;ConstraintViolation&lt;LoginRequest&gt;&gt; v = vali.validate(req);</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">    if (!v.isEmpty()) return v.iterator().next().getMessage();</span>
+<span class="fc" id="L32">    return null;</span>
+  }
+
+    public void validateRequest(LoginRequest req) {
+<span class="fc" id="L36">    Set&lt;ConstraintViolation&lt;LoginRequest&gt;&gt; v = vali.validate(req);</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">    if (!v.isEmpty()) {</span>
+<span class="fc" id="L38">      String msg = v.iterator().next().getMessage();</span>
+<span class="fc" id="L39">      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);</span>
+    }
+<span class="fc" id="L41">  }</span>
+
+  boolean matches(String raw, String hash) {
+<span class="pc bpc" id="L44" title="1 of 4 branches missed.">    return hash != null &amp;&amp; encoder.matches(raw, hash);</span>
+  }
+
+  public LoginResponse authenticate(LoginRequest req) {
+<span class="fc" id="L48">    String violation = firstViolation(req);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">    if (violation != null) {</span>
+<span class="fc" id="L50">      return new LoginResponse(false, violation, null, null);</span>
+    }
+
+<span class="fc" id="L53">    AuthUser user = repo.findByUsername(req.getUsername()).orElse(null);</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">    if (user == null) {</span>
+<span class="fc" id="L55">      return new LoginResponse(false, &quot;Username không tồn tại&quot;, null, null);</span>
+    }
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">    if (!matches(req.getPassword(), user.getPasswordHash())) {</span>
+<span class="fc" id="L59">      return new LoginResponse(false, &quot;Sai mật khẩu&quot;, null, null);</span>
+    }
+
+<span class="fc" id="L62">    String token = UUID.randomUUID().toString();</span>
+<span class="fc" id="L63">    return new LoginResponse(true, &quot;Đăng nhập thành công&quot;, token, user.getUsername());</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

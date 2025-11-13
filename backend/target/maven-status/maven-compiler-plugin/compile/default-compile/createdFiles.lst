@@ -14,3 +14,4 @@ com\flogin\dto\ApiError.class
 com\flogin\controller\AuthController.class
 com\flogin\WebConfig.class
 com\flogin\WebConfig$1.class
+com\flogin\service\AuthService.class

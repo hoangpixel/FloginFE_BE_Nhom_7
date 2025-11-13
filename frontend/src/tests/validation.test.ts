@@ -1,3 +1,4 @@
+/// <reference types="jest" />
 import { validateUsername, validatePassword } from '../lib/validation';
 
 describe('Login Validation Tests - validateUsername', () => {
