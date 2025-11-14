@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">backend</a> &gt; <a href="index.source.html" class="el_package">com.flogin.service</a> &gt; <span class="el_source">ProductService.java</span></div><h1>ProductService.java</h1><pre class="source lang-java linenums">package com.flogin.service;
+
+import java.util.Locale;
+import java.util.Objects;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.flogin.dto.ProductRequest;
+import com.flogin.entity.Category;
+import com.flogin.entity.Product;
+import com.flogin.repository.ProductRepository;
+
+@Service
+@SuppressWarnings(&quot;null&quot;)
+public class ProductService {
+  private final ProductRepository repo;
+<span class="fc" id="L22">  public ProductService(ProductRepository repo) { this.repo = repo; }</span>
+
+  @Transactional
+  public Product createProduct(ProductRequest req) {
+<span class="fc" id="L26">    Product p = new Product();</span>
+<span class="fc" id="L27">    fill(p, req);</span>
+<span class="fc" id="L28">    return repo.save(p);</span>
+  }
+
+  @Transactional(readOnly = true)
+  public Product getProduct(long id) {
+<span class="fc" id="L33">    return repo.findById(id).orElseThrow(() -&gt; new ResponseStatusException(HttpStatus.NOT_FOUND, &quot;Product not found&quot;));</span>
+  }
+
+  @Transactional
+  public Product updateProduct(long id, ProductRequest req) {
+<span class="fc" id="L38">    Product existing = repo.findById(id).orElseThrow(() -&gt; new ResponseStatusException(HttpStatus.NOT_FOUND, &quot;Product not found&quot;));</span>
+<span class="fc" id="L39">    fill(existing, req);</span>
+<span class="fc" id="L40">    return repo.save(existing);</span>
+  }
+
+  @Transactional
+  public void deleteProduct(long id) {
+<span class="fc bfc" id="L45" title="All 2 branches covered.">    if (!repo.existsById(id)) {</span>
+<span class="fc" id="L46">      throw new ResponseStatusException(HttpStatus.NOT_FOUND, &quot;Product not found&quot;);</span>
+    }
+<span class="fc" id="L48">    repo.deleteById(id);</span>
+<span class="fc" id="L49">  }</span>
+
+  @Transactional(readOnly = true)
+  public Page&lt;Product&gt; getAll(Pageable pageable) {
+<span class="fc" id="L53">    Objects.requireNonNull(pageable, &quot;pageable must not be null&quot;);</span>
+<span class="fc" id="L54">    return repo.findAll(pageable);</span>
+  }
+
+  private void fill(Product p, ProductRequest req) {
+<span class="fc" id="L58">    p.setName(req.getName());</span>
+<span class="fc" id="L59">    p.setPrice(req.getPrice());</span>
+<span class="fc" id="L60">    p.setQuantity(req.getQuantity());</span>
+<span class="fc" id="L61">    p.setDescription(req.getDescription());</span>
+<span class="fc" id="L62">    p.setCategory(parseCategory(req.getCategory()));</span>
+<span class="fc" id="L63">  }</span>
+
+  private Category parseCategory(String raw) {
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">    if (raw == null) {</span>
+<span class="nc" id="L67">      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;Category là bắt buộc&quot;);</span>
+    }
+    try {
+<span class="fc" id="L70">      return Category.valueOf(raw.trim().toUpperCase(Locale.ROOT));</span>
+<span class="nc" id="L71">    } catch (IllegalArgumentException ex) {</span>
+<span class="nc" id="L72">      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;Category không hợp lệ&quot;);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

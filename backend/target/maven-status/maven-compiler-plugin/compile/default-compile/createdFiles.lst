@@ -8,6 +8,7 @@ com\flogin\entity\AuthUser.class
 com\flogin\controller\ProductController.class
 com\flogin\entity\Product.class
 com\flogin\exception\ApiExceptionHandler.class
+com\flogin\service\ProductService.class
 com\flogin\repository\AuthUserRepository.class
 com\flogin\repository\ProductRepository.class
 com\flogin\dto\ApiError.class

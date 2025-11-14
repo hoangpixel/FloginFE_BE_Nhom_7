@@ -34,11 +34,11 @@ public class Product {
   private Integer price;
 
   // &gt;= 0 và &lt;= 99,999
-<span class="nc" id="L37">  @NotNull</span>
+<span class="fc" id="L37">  @NotNull</span>
   @PositiveOrZero
   @Max(99_999)
   @Column(nullable = false)
-<span class="nc" id="L41">  private Integer quantity = 0;</span>
+<span class="fc" id="L41">  private Integer quantity = 0;</span>
 
   // &lt;= 500 ký tự, có thể null
   @Size(max = 500)
@@ -51,20 +51,20 @@ public class Product {
   @Column(nullable = false, length = 50)
   private Category category;
 
-<span class="nc" id="L54">  public Product() {}</span>
+<span class="fc" id="L54">  public Product() {}</span>
 
   // getters/setters
-<span class="nc" id="L57">  public Long getId() { return id; }</span>
-<span class="nc" id="L58">  public void setId(Long id) { this.id = id; }</span>
-<span class="nc" id="L59">  public String getName() { return name; }</span>
-<span class="nc" id="L60">  public void setName(String name) { this.name = name; }</span>
-<span class="nc" id="L61">  public Integer getPrice() { return price; }</span>
-<span class="nc" id="L62">  public void setPrice(Integer price) { this.price = price; }</span>
+<span class="fc" id="L57">  public Long getId() { return id; }</span>
+<span class="fc" id="L58">  public void setId(Long id) { this.id = id; }</span>
+<span class="fc" id="L59">  public String getName() { return name; }</span>
+<span class="fc" id="L60">  public void setName(String name) { this.name = name; }</span>
+<span class="fc" id="L61">  public Integer getPrice() { return price; }</span>
+<span class="fc" id="L62">  public void setPrice(Integer price) { this.price = price; }</span>
 <span class="nc" id="L63">  public Integer getQuantity() { return quantity; }</span>
-<span class="nc" id="L64">  public void setQuantity(Integer quantity) { this.quantity = quantity; }</span>
+<span class="fc" id="L64">  public void setQuantity(Integer quantity) { this.quantity = quantity; }</span>
 <span class="nc" id="L65">  public String getDescription() { return description; }</span>
-<span class="nc" id="L66">  public void setDescription(String description) { this.description = description; }</span>
-<span class="nc" id="L67">  public Category getCategory() { return category; }</span>
-<span class="nc" id="L68">  public void setCategory(Category category) { this.category = category; }</span>
+<span class="fc" id="L66">  public void setDescription(String description) { this.description = description; }</span>
+<span class="fc" id="L67">  public Category getCategory() { return category; }</span>
+<span class="fc" id="L68">  public void setCategory(Category category) { this.category = category; }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
