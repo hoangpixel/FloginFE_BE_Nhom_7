@@ -63,13 +63,13 @@ public class ProductService {
 <span class="fc" id="L63">  }</span>
 
   private Category parseCategory(String raw) {
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">    if (raw == null) {</span>
-<span class="nc" id="L67">      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;Category là bắt buộc&quot;);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">    if (raw == null) {</span>
+<span class="fc" id="L67">      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;Category là bắt buộc&quot;);</span>
     }
     try {
 <span class="fc" id="L70">      return Category.valueOf(raw.trim().toUpperCase(Locale.ROOT));</span>
-<span class="nc" id="L71">    } catch (IllegalArgumentException ex) {</span>
-<span class="nc" id="L72">      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;Category không hợp lệ&quot;);</span>
+<span class="fc" id="L71">    } catch (IllegalArgumentException ex) {</span>
+<span class="fc" id="L72">      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;Category không hợp lệ&quot;);</span>
     }
   }
 }
