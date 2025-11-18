@@ -8,32 +8,32 @@ public class ApiError {
   private String error;
   private String message;
   private String path;            
-<span class="nc" id="L11">  private Instant timestamp = Instant.now();</span>
+<span class="pc" id="L11">  private Instant timestamp = Instant.now();</span>
   private List&lt;String&gt; errors;
 
 <span class="nc" id="L14">  public ApiError() {}</span>
-<span class="nc" id="L15">  public ApiError(int status, String error, String message) {</span>
-<span class="nc" id="L16">    this.status = status;</span>
-<span class="nc" id="L17">    this.error = error;</span>
-<span class="nc" id="L18">    this.message = message;</span>
-<span class="nc" id="L19">  }</span>
+<span class="fc" id="L15">  public ApiError(int status, String error, String message) {</span>
+<span class="fc" id="L16">    this.status = status;</span>
+<span class="fc" id="L17">    this.error = error;</span>
+<span class="fc" id="L18">    this.message = message;</span>
+<span class="fc" id="L19">  }</span>
 
-<span class="nc" id="L21">  public int getStatus() { return status; }</span>
+<span class="fc" id="L21">  public int getStatus() { return status; }</span>
 <span class="nc" id="L22">  public void setStatus(int status) { this.status = status; }</span>
 
-<span class="nc" id="L24">  public String getError() { return error; }</span>
+<span class="fc" id="L24">  public String getError() { return error; }</span>
 <span class="nc" id="L25">  public void setError(String error) { this.error = error; }</span>
 
-<span class="nc" id="L27">  public String getMessage() { return message; }</span>
+<span class="fc" id="L27">  public String getMessage() { return message; }</span>
 <span class="nc" id="L28">  public void setMessage(String message) { this.message = message; }</span>
 
-<span class="nc" id="L30">  public String getPath() { return path; }        </span>
-<span class="nc" id="L31">  public void setPath(String path) { this.path = path; } </span>
+<span class="fc" id="L30">  public String getPath() { return path; }        </span>
+<span class="fc" id="L31">  public void setPath(String path) { this.path = path; } </span>
 
-<span class="nc" id="L33">  public Instant getTimestamp() { return timestamp; }</span>
+<span class="fc" id="L33">  public Instant getTimestamp() { return timestamp; }</span>
 <span class="nc" id="L34">  public void setTimestamp(Instant timestamp) { this.timestamp = timestamp; }</span>
 
-<span class="nc" id="L36">  public List&lt;String&gt; getErrors() { return errors; }      </span>
-<span class="nc" id="L37">  public void setErrors(List&lt;String&gt; errors) { this.errors = errors; } </span>
+<span class="fc" id="L36">  public List&lt;String&gt; getErrors() { return errors; }      </span>
+<span class="fc" id="L37">  public void setErrors(List&lt;String&gt; errors) { this.errors = errors; } </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

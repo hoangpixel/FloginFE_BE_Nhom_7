@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.flogin.service.AuthServiceTest" time="0.176" tests="6" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.flogin.controller.AuthControllerIntegrationTest" time="4.378" tests="7" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -64,10 +64,84 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testLoginSuccess" classname="com.flogin.service.AuthServiceTest" time="0.11"/>
-  <testcase name="testDTO_HopLe" classname="com.flogin.service.AuthServiceTest" time="0.0"/>
-  <testcase name="testLoginFailureUsername" classname="com.flogin.service.AuthServiceTest" time="0.0"/>
-  <testcase name="testValidationerrors" classname="com.flogin.service.AuthServiceTest" time="0.033"/>
-  <testcase name="testDTO_KhongHopLe_1" classname="com.flogin.service.AuthServiceTest" time="0.004"/>
-  <testcase name="testLoginFailurePassword" classname="com.flogin.service.AuthServiceTest" time="0.0"/>
+  <testcase name="testLoginBadRequestFromService" classname="com.flogin.controller.AuthControllerIntegrationTest" time="0.418">
+    <system-out><![CDATA[12:34:45.767 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.flogin.controller.AuthControllerIntegrationTest]: AuthControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+12:34:45.984 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.flogin.Application for test class com.flogin.controller.AuthControllerIntegrationTest
+12:34:46.120 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.3.13)
+
+2025-11-18T12:34:46.654+07:00  INFO 17772 --- [           main] c.f.c.AuthControllerIntegrationTest      : Starting AuthControllerIntegrationTest using Java 21.0.4 with PID 17772 (started by LE MINH HUY in C:\Users\LE MINH HUY\Desktop\software testing\FloginFE_BE_Nhom_7\backend)
+2025-11-18T12:34:46.654+07:00 DEBUG 17772 --- [           main] c.f.c.AuthControllerIntegrationTest      : Running with Spring Boot v3.3.13, Spring v6.1.21
+2025-11-18T12:34:46.654+07:00  INFO 17772 --- [           main] c.f.c.AuthControllerIntegrationTest      : No active profile set, falling back to 1 default profile: "default"
+2025-11-18T12:34:46.691+07:00 DEBUG 17772 --- [           main] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@2a0b901c
+2025-11-18T12:34:48.964+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : 3 mappings in 'requestMappingHandlerMapping'
+2025-11-18T12:34:49.121+07:00 DEBUG 17772 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-11-18T12:34:49.176+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-11-18T12:34:49.233+07:00 DEBUG 17772 --- [           main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-11-18T12:34:49.286+07:00  INFO 17772 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-11-18T12:34:49.286+07:00  INFO 17772 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-11-18T12:34:49.286+07:00  INFO 17772 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-11-18T12:34:49.320+07:00  INFO 17772 --- [           main] c.f.c.AuthControllerIntegrationTest      : Started AuthControllerIntegrationTest in 3.231 seconds (process running for 4.619)
+2025-11-18T12:34:49.485+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.flogin.controller.AuthController#login(LoginRequest)
+2025-11-18T12:34:49.553+07:00 DEBUG 17772 --- [           main] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.flogin.dto.LoginRequest@45b221c7]
+2025-11-18T12:34:49.676+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-18T12:34:49.676+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.flogin.dto.LoginResponse@470a2845]
+]]></system-out>
+    <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (C:\Users\LE MINH HUY\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.19\byte-buddy-agent-1.14.19.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+  </testcase>
+  <testcase name="testLoginSuccess" classname="com.flogin.controller.AuthControllerIntegrationTest" time="0.004">
+    <system-out><![CDATA[2025-11-18T12:34:49.760+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.flogin.controller.AuthController#login(LoginRequest)
+2025-11-18T12:34:49.762+07:00 DEBUG 17772 --- [           main] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.flogin.dto.LoginRequest@532860c7]
+2025-11-18T12:34:49.762+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-18T12:34:49.762+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.flogin.dto.LoginResponse@9d573a6]
+]]></system-out>
+  </testcase>
+  <testcase name="testLoginUnauthorized" classname="com.flogin.controller.AuthControllerIntegrationTest" time="0.008">
+    <system-out><![CDATA[2025-11-18T12:34:49.774+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.flogin.controller.AuthController#login(LoginRequest)
+2025-11-18T12:34:49.775+07:00 DEBUG 17772 --- [           main] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.flogin.dto.LoginRequest@687313e1]
+2025-11-18T12:34:49.776+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-18T12:34:49.776+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.flogin.dto.LoginResponse@6eaf016e]
+]]></system-out>
+  </testcase>
+  <testcase name="testLoginUsernameNotFound" classname="com.flogin.controller.AuthControllerIntegrationTest" time="0.011">
+    <system-out><![CDATA[2025-11-18T12:34:49.784+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.flogin.controller.AuthController#login(LoginRequest)
+2025-11-18T12:34:49.785+07:00 DEBUG 17772 --- [           main] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.flogin.dto.LoginRequest@5b12157b]
+2025-11-18T12:34:49.787+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-18T12:34:49.788+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.flogin.dto.LoginResponse@73760b13]
+]]></system-out>
+  </testcase>
+  <testcase name="testLoginPasswordTooShortValidation" classname="com.flogin.controller.AuthControllerIntegrationTest" time="0.045">
+    <system-out><![CDATA[2025-11-18T12:34:49.794+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.flogin.controller.AuthController#login(LoginRequest)
+2025-11-18T12:34:49.794+07:00 DEBUG 17772 --- [           main] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.flogin.dto.LoginRequest@4e216b7e]
+2025-11-18T12:34:49.810+07:00 DEBUG 17772 --- [           main] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.flogin.exception.ApiExceptionHandler#handleValidation(MethodArgumentNotValidException, HttpServletRequest)
+2025-11-18T12:34:49.822+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-18T12:34:49.823+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.flogin.dto.ApiError@75b994f7]
+2025-11-18T12:34:49.827+07:00 DEBUG 17772 --- [           main] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.flogin.dto.LoginResponse> com.flogin.controller.AuthController.login(com.flogin.dto.LoginRequest) with 2 errors: [Field error in object 'loginRequest' on field 'password': rejected value [abc]; codes [Pattern.loginRequest.password,Pattern.password,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [loginRequest.password,password]; arguments []; default message [password],[Ljakarta.validation.constraints.Pattern$Flag;@a632ae0,^(?=.*[A-Za-z])(?=.*\d).+$]; default message [password phải có ít nhất 1 chữ thường và hoa]] [Field error in object 'loginRequest' on field 'password': rejected value [abc]; codes [Size.loginRequest.password,Size.password,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [loginRequest.password,password]; arguments []; default message [password],100,6]; default message [password phải có từ 6 đến 100 ký tự]] ]
+]]></system-out>
+  </testcase>
+  <testcase name="testCorsPreflight" classname="com.flogin.controller.AuthControllerIntegrationTest" time="0.022">
+    <system-out><![CDATA[2025-11-18T12:34:49.838+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.flogin.controller.AuthController#login(LoginRequest)
+]]></system-out>
+  </testcase>
+  <testcase name="testLoginValidationError" classname="com.flogin.controller.AuthControllerIntegrationTest" time="0.011">
+    <system-out><![CDATA[2025-11-18T12:34:49.866+07:00 DEBUG 17772 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.flogin.controller.AuthController#login(LoginRequest)
+2025-11-18T12:34:49.866+07:00 DEBUG 17772 --- [           main] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.flogin.dto.LoginRequest@58070889]
+2025-11-18T12:34:49.867+07:00 DEBUG 17772 --- [           main] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.flogin.exception.ApiExceptionHandler#handleValidation(MethodArgumentNotValidException, HttpServletRequest)
+2025-11-18T12:34:49.867+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-18T12:34:49.868+07:00 DEBUG 17772 --- [           main] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.flogin.dto.ApiError@225fc6a2]
+2025-11-18T12:34:49.868+07:00 DEBUG 17772 --- [           main] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.flogin.dto.LoginResponse> com.flogin.controller.AuthController.login(com.flogin.dto.LoginRequest): [Field error in object 'loginRequest' on field 'username': rejected value [ab]; codes [Size.loginRequest.username,Size.username,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [loginRequest.username,username]; arguments []; default message [username],50,3]; default message [username phải có từ 3 đến 50 ký tự]] ]
+]]></system-out>
+  </testcase>
 </testsuite>

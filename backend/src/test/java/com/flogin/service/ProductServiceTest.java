@@ -74,6 +74,24 @@ class ProductServiceTest {
     verify(repo).save(any(Product.class));
   }
 
+  @Test @DisplayName("createProduct: null category -> 400")
+  void testCreateProductNullCategory() {
+    ProductRequest req = buildRequest();
+    req.setCategory(null); // trigger parseCategory null branch
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.createProduct(req));
+    assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    assertEquals("Category là bắt buộc", ex.getReason());
+  }
+
+  @Test @DisplayName("createProduct: invalid category -> 400")
+  void testCreateProductInvalidCategory() {
+    ProductRequest req = buildRequest();
+    req.setCategory("invalid-cat");
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.createProduct(req));
+    assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    assertEquals("Category không hợp lệ", ex.getReason());
+  }
+
   @Test @DisplayName("getProduct: found")
   void testGetProductFound() {
     Product existing = buildExisting();
@@ -102,6 +120,17 @@ class ProductServiceTest {
     assertEquals(25000000, updated.getPrice());
     assertEquals(Category.ELECTRONICS, updated.getCategory());
     verify(repo).save(existing);
+  }
+
+  @Test @DisplayName("updateProduct: invalid category -> 400")
+  void testUpdateProductInvalidCategory() {
+    Product existing = buildExisting();
+    when(repo.findById(1L)).thenReturn(Optional.of(existing));
+    ProductRequest req = buildRequest();
+    req.setCategory("bad");
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.updateProduct(1L, req));
+    assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+    assertEquals("Category không hợp lệ", ex.getReason());
   }
 
   @Test @DisplayName("updateProduct: not found -> 404")
@@ -141,5 +170,11 @@ class ProductServiceTest {
     assertEquals(5, result.getTotalElements());
     assertEquals("Second", result.getContent().get(1).getName());
     verify(repo).findAll(pageReq);
+  }
+
+  @Test @DisplayName("getAll: null pageable -> NPE")
+  void testGetAllNullPageable() {
+    NullPointerException ex = assertThrows(NullPointerException.class, () -> service.getAll(null));
+    assertEquals("pageable must not be null", ex.getMessage());
   }
 }

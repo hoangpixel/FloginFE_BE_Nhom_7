@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-<span class="nc" id="L15">public class ApiExceptionHandler {</span>
-<span class="nc" id="L16">  private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);</span>
+<span class="fc" id="L15">public class ApiExceptionHandler {</span>
+<span class="fc" id="L16">  private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);</span>
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity&lt;ApiError&gt; handleValidation(
       MethodArgumentNotValidException ex, HttpServletRequest req) {
 
-<span class="nc" id="L22">    ApiError body = new ApiError(400, &quot;Bad Request&quot;, &quot;Validation failed&quot;);</span>
-<span class="nc" id="L23">    body.setPath(req.getRequestURI());</span>
-<span class="nc" id="L24">    body.setErrors(</span>
-<span class="nc" id="L25">        ex.getBindingResult().getFieldErrors()</span>
-<span class="nc" id="L26">          .stream()</span>
-<span class="nc" id="L27">          .map(e -&gt; e.getField() + &quot;: &quot; + e.getDefaultMessage())</span>
-<span class="nc" id="L28">          .collect(Collectors.toList())</span>
+<span class="fc" id="L22">    ApiError body = new ApiError(400, &quot;Bad Request&quot;, &quot;Validation failed&quot;);</span>
+<span class="fc" id="L23">    body.setPath(req.getRequestURI());</span>
+<span class="fc" id="L24">    body.setErrors(</span>
+<span class="fc" id="L25">        ex.getBindingResult().getFieldErrors()</span>
+<span class="fc" id="L26">          .stream()</span>
+<span class="fc" id="L27">          .map(e -&gt; e.getField() + &quot;: &quot; + e.getDefaultMessage())</span>
+<span class="fc" id="L28">          .collect(Collectors.toList())</span>
     );
-<span class="nc" id="L30">    return ResponseEntity.badRequest().body(body);</span>
+<span class="fc" id="L30">    return ResponseEntity.badRequest().body(body);</span>
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)

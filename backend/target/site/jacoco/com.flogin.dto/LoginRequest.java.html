@@ -15,14 +15,14 @@ public class LoginRequest {
   @Pattern(regexp = &quot;^(?=.*[A-Za-z])(?=.*\\d).+$&quot;, message = &quot;password phải có ít nhất 1 chữ thường và hoa&quot;)
   private String password;
 
-<span class="nc" id="L18">  public LoginRequest() {}</span>
+<span class="fc" id="L18">  public LoginRequest() {}</span>
 <span class="fc" id="L19">  public LoginRequest(String username, String password) {</span>
 <span class="fc" id="L20">    this.username = username; this.password = password;</span>
 <span class="fc" id="L21">  }</span>
 
 <span class="fc" id="L23">  public String getUsername() { return username; }</span>
-<span class="nc" id="L24">  public void setUsername(String username) { this.username = username; }</span>
+<span class="fc" id="L24">  public void setUsername(String username) { this.username = username; }</span>
 <span class="fc" id="L25">  public String getPassword() { return password; }</span>
-<span class="nc" id="L26">  public void setPassword(String password) { this.password = password; }</span>
+<span class="fc" id="L26">  public void setPassword(String password) { this.password = password; }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

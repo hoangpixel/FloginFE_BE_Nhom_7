@@ -19,25 +19,25 @@ public class AuthController {
 
   private final AuthService authService;
 
-<span class="nc" id="L22">  public AuthController(AuthService authService) {</span>
-<span class="nc" id="L23">    this.authService = authService;</span>
-<span class="nc" id="L24">  }</span>
+<span class="fc" id="L22">  public AuthController(AuthService authService) {</span>
+<span class="fc" id="L23">    this.authService = authService;</span>
+<span class="fc" id="L24">  }</span>
 
   @PostMapping(&quot;/login&quot;)
   public ResponseEntity&lt;LoginResponse&gt; login(@Valid @RequestBody LoginRequest req) {
-<span class="nc" id="L28">    LoginResponse res = authService.authenticate(req);</span>
+<span class="fc" id="L28">    LoginResponse res = authService.authenticate(req);</span>
 
-<span class="nc bnc" id="L30" title="All 2 branches missed.">    if (res.isSuccess()) {</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">    if (res.isSuccess()) {</span>
       // Đăng nhập OK
-<span class="nc" id="L32">      return ResponseEntity.ok(res);</span>
+<span class="fc" id="L32">      return ResponseEntity.ok(res);</span>
     }
 
     // Phân loại lỗi để map status code “đúng REST”
-<span class="nc" id="L36">    String msg = res.getMessage();</span>
-<span class="nc bnc" id="L37" title="All 4 branches missed.">    if (&quot;Username không tồn tại&quot;.equals(msg) || &quot;Sai mật khẩu&quot;.equals(msg)) {</span>
-<span class="nc" id="L38">      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res); // 401</span>
+<span class="fc" id="L36">    String msg = res.getMessage();</span>
+<span class="fc bfc" id="L37" title="All 4 branches covered.">    if (&quot;Username không tồn tại&quot;.equals(msg) || &quot;Sai mật khẩu&quot;.equals(msg)) {</span>
+<span class="fc" id="L38">      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res); // 401</span>
     }
-<span class="nc" id="L40">    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);     // 400 (lỗi validate)</span>
+<span class="fc" id="L40">    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);     // 400 (lỗi validate)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
