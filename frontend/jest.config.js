@@ -11,6 +11,10 @@ export default {
     '<rootDir>/src/**/*.test.{js,jsx,ts,tsx}',
   ],
 
+  // ➡️ THÊM DÒNG NÀY VÀO ĐÂY
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  // --------------------------------------------------
+
   // Coverage: để script quyết định collectCoverageFrom
   collectCoverage: true,
   coverageReporters: ['text', 'text-summary', 'lcov'],

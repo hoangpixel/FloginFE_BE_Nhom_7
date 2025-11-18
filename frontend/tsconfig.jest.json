@@ -6,5 +6,7 @@
     "allowJs": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*.{ts,tsx,js,jsx}"]
+  "include": [
+    "src/**/*.{ts,tsx,js,jsx}"
+  ]
 }
