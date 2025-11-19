@@ -108,9 +108,23 @@ public class AuthServiceTest {
         assertNull(res.getToken());
     }
 
+    @Test
+    @DisplayName("TC5: Login thất bại do lỗi dữ liệu (Password Hash null)")
+    void testLoginFailure_HashNull() {
+        LoginRequest req = new LoginRequest("testuser", "Test123");
+        AuthUser user = new AuthUser(null, "testuser", null); 
+
+        when(vali.validate(req)).thenReturn(Set.of()); 
+        when(repo.findByUsername("testuser")).thenReturn(Optional.of(user));
+        LoginResponse res = authService.authenticate(req);
+
+        assertFalse(res.isSuccess());
+        assertEquals("Sai mật khẩu", res.getMessage()); 
+    }
+    
     // b) Test validation methods riêng lẻ
     @Test
-    @DisplayName("TC5: Test validation methods DTO hợp lệ")
+    @DisplayName("TC6: Test validation methods DTO hợp lệ")
     void testDTO_HopLe()
     {
         LoginRequest req = new LoginRequest("mhoang","Mhoang123");
@@ -119,7 +133,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("TC6: Test validation methods username rỗng")
+    @DisplayName("TC7: Test validation methods username rỗng")
     void testDTO_KhongHopLe_1()
     {
         LoginRequest req = new LoginRequest("","Mhoang123");
