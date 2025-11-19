@@ -1,5 +1,9 @@
 // Cài đặt thư viện: pnpm install --save-dev encoding
 // Định nghĩa TextEncoder/TextDecoder cho môi trường Jest/JSDOM
+import { TextEncoder, TextDecoder } from 'util';
+
+Object.assign(global, { TextEncoder, TextDecoder });
+
 const { TextEncoder, TextDecoder } = require('util');
 
 if (typeof global.TextEncoder === 'undefined') {
