@@ -149,7 +149,7 @@ class AuthControllerIntegrationTest {
             .thenReturn(new LoginResponse(false, "Sai mật khẩu", null, null));
         mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new LoginRequest("tester","BadPass"))))
+                .content(objectMapper.writeValueAsString(new LoginRequest("tester","BadPass1"))))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.success").value(false))
             .andExpect(jsonPath("$.message").value("Sai mật khẩu"))

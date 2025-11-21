@@ -3,16 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
+"scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+
     "test": "jest",
-    "test:cov:login": "jest --coverage --coverageReporters=text --collectCoverageFrom=src/lib/validation.ts --findRelatedTests src/lib/validation.ts",
-    "test:cov:product": "jest --coverage --coverageReporters=text --collectCoverageFrom=src/lib/productValidation.ts --findRelatedTests src/lib/productValidation.ts",
-    "test:cov:both": "jest --coverage --coverageReporters=text --collectCoverageFrom=src/lib/validation.ts --collectCoverageFrom=src/lib/productValidation.ts"
-  },
+    
+    "test:watch": "jest --watch",
+    
+    "test:file": "jest",
+    "test:file:cov": "jest --coverage",
+    "test:cov:full": "jest --coverage --coverageReporters=text --coverageReporters=lcov --collectCoverageFrom=\"src/**/*.{ts,tsx}\" --collectCoverageFrom=\"!src/main.tsx\" --collectCoverageFrom=\"!src/vite-env.d.ts\" --collectCoverageFrom=\"!src/**/*.d.ts\"",    
+    "test:cov:clean": "jest --coverage --coverageReporters=lcov --coverageReporters=text --collectCoverageFrom=\"src/**/*.{ts,tsx}\" --collectCoverageFrom=\"!src/main.tsx\" --collectCoverageFrom=\"!src/vite-env.d.ts\" --collectCoverageFrom=\"!src/**/*.d.ts\" --collectCoverageFrom=\"!src/App.tsx\" --collectCoverageFrom=\"!src/router/**\" --collectCoverageFrom=\"!src/services/**\""  },
   "dependencies": {
     "axios": "^1.13.2",
     "react": "^19.1.1",
