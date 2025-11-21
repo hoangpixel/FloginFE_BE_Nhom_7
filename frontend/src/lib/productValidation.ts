@@ -9,9 +9,11 @@ const VALID_CATEGORIES: string[] = [
     "HOME",
     "OTHER"
 ];
+export { VALID_CATEGORIES };
+
 export const validateProduct = (
     productname: string,
-    price: GLfloat,
+    price: number, // changed from GLfloat to number for TS correctness
     quantity: number,
     description: string,
     category: string
@@ -32,9 +34,9 @@ export const validateProduct = (
     if (description && description.length > MAX_DESCRIPTION_LENGTH) {
         return `Mô tả không được vượt quá ${MAX_DESCRIPTION_LENGTH} ký tự.`;
     }
-    if (!category || category.trim() === '') {
-        return 'Danh mục sản phẩm không được để trống.';
-    }
+    // if (!category || category.trim() === '') {
+    //     return 'Danh mục sản phẩm không được để trống.';
+    // }
     const inputCategory = category.trim().toUpperCase();
     if (!VALID_CATEGORIES.includes(inputCategory)) {
         return 'Danh mục sản phẩm không hợp lệ hoặc không có sẵn.';

@@ -175,6 +175,6 @@ class ProductServiceTest {
   @Test @DisplayName("getAll: null pageable -> NPE")
   void testGetAllNullPageable() {
     NullPointerException ex = assertThrows(NullPointerException.class, () -> service.getAll(null));
-    assertEquals("pageable must not be null", ex.getMessage());
+    assertEquals("pageable không được null", ex.getMessage());
   }
 }

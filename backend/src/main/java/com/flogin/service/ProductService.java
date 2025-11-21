@@ -30,12 +30,12 @@ public class ProductService {
 
   @Transactional(readOnly = true)
   public Product getProduct(long id) {
-    return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+    return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm"));
   }
 
   @Transactional
   public Product updateProduct(long id, ProductRequest req) {
-    Product existing = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+    Product existing = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm"));
     fill(existing, req);
     return repo.save(existing);
   }
@@ -43,14 +43,14 @@ public class ProductService {
   @Transactional
   public void deleteProduct(long id) {
     if (!repo.existsById(id)) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm");
     }
     repo.deleteById(id);
   }
 
   @Transactional(readOnly = true)
   public Page<Product> getAll(Pageable pageable) {
-    Objects.requireNonNull(pageable, "pageable must not be null");
+    Objects.requireNonNull(pageable, "pageable không được null");
     return repo.findAll(pageable);
   }
 

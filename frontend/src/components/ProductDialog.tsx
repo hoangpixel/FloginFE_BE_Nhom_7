@@ -100,8 +100,8 @@ export default function ProductDialog({
 
   const readOnly = mode === 'view';
   const title = mode === 'create' ? 'Thêm sản phẩm'
-              : mode === 'edit'   ? 'Sửa sản phẩm'
-              : 'Chi tiết sản phẩm';
+    : mode === 'edit' ? 'Sửa sản phẩm'
+      : 'Chi tiết sản phẩm';
 
   function onChange<K extends keyof ProductPayload>(k: K, v: ProductPayload[K]) {
     setForm(prev => ({ ...prev, [k]: v }));
@@ -117,7 +117,9 @@ export default function ProductDialog({
 
     const { invalidList } = validateProduct(form);
     if (invalidList.length > 0) {
-      setShowAllErrors(true); // lần đầu bấm Lưu mới hiện hết lỗi
+      // Hiển thị toàn bộ lỗi và đánh dấu touched cho tất cả field để hiện class đỏ
+      setTouched({ name: true, price: true, quantity: true, description: true, category: true });
+      setShowAllErrors(true);
       return;
     }
     await onSave(form);
@@ -152,7 +154,7 @@ export default function ProductDialog({
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-xl bg-black text-white grid place-items-center">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M10 3H3v7h7V3zM21 3h-7v7h7V3zM21 14h-7v7h7v-7zM10 14H3v7h7v-7z"/>
+                <path d="M10 3H3v7h7V3zM21 3h-7v7h7V3zM21 14h-7v7h7v-7zM10 14H3v7h7v-7z" />
               </svg>
             </div>
             <div className="flex-1">
@@ -166,7 +168,7 @@ export default function ProductDialog({
               aria-label="Close"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.3 5.71 12 12.01l-6.29-6.3-1.41 1.42L10.59 13.4l-6.3 6.29 1.42 1.41 6.29-6.3 6.29 6.3 1.41-1.41-6.29-6.29 6.29-6.29z"/>
+                <path d="M18.3 5.71 12 12.01l-6.29-6.3-1.41 1.42L10.59 13.4l-6.3 6.29 1.42 1.41 6.29-6.3 6.29 6.3 1.41-1.41-6.29-6.29 6.29-6.29z" />
               </svg>
             </button>
           </div>
@@ -186,7 +188,7 @@ export default function ProductDialog({
               aria-invalid={shouldShow('name') && !!fieldErrors.name}
             />
             {shouldShow('name') && fieldErrors.name && (
-              <p className="text-sm text-red-600">{fieldErrors.name}</p>
+              <p className="text-sm text-red-600" data-testid="error-name">{fieldErrors.name}</p>
             )}
           </div>
 
@@ -205,7 +207,7 @@ export default function ProductDialog({
                 aria-invalid={shouldShow('price') && !!fieldErrors.price}
               />
               {shouldShow('price') && fieldErrors.price && (
-                <p className="text-sm text-red-600">{fieldErrors.price}</p>
+                <p className="text-sm text-red-600" data-testid="error-price">{fieldErrors.price}</p>
               )}
             </div>
             <div className="space-y-1.5">
@@ -215,14 +217,19 @@ export default function ProductDialog({
                 type="number"
                 placeholder="Quantity"
                 value={form.quantity}
-                onChange={e => onChange('quantity', Number(e.target.value))}
+                // *** ĐÃ SỬA: Đảm bảo giá trị âm được đọc đúng cho test (dù min=0) ***
+                onChange={e => {
+                  const rawValue = e.target.value;
+                  const val = rawValue === '' ? 0 : Number(rawValue);
+                  onChange('quantity', val);
+                }}
                 onBlur={() => onBlur('quantity')}
                 disabled={readOnly}
                 min={0}
                 aria-invalid={shouldShow('quantity') && !!fieldErrors.quantity}
               />
               {shouldShow('quantity') && fieldErrors.quantity && (
-                <p className="text-sm text-red-600">{fieldErrors.quantity}</p>
+                <p className="text-sm text-red-600" data-testid="error-quantity">{fieldErrors.quantity}</p>
               )}
             </div>
           </div>
@@ -237,13 +244,15 @@ export default function ProductDialog({
                 onBlur={() => onBlur('category')}
                 disabled={readOnly}
                 aria-invalid={shouldShow('category') && !!fieldErrors.category}
+                data-testid="field-category"
               >
+                <option value="">--Chọn--</option>
                 {categories.map(c => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
               {shouldShow('category') && fieldErrors.category && (
-                <p className="text-sm text-red-600">{fieldErrors.category}</p>
+                <p className="text-sm text-red-600" data-testid="error-category">{fieldErrors.category}</p>
               )}
             </div>
 
@@ -258,9 +267,10 @@ export default function ProductDialog({
                 rows={3}
                 disabled={readOnly}
                 aria-invalid={shouldShow('description') && !!fieldErrors.description}
+                data-testid="field-description"
               />
               {shouldShow('description') && fieldErrors.description && (
-                <p className="text-sm text-red-600">{fieldErrors.description}</p>
+                <p className="text-sm text-red-600" data-testid="error-description">{fieldErrors.description}</p>
               )}
             </div>
           </div>
@@ -269,10 +279,10 @@ export default function ProductDialog({
         {/* Footer */}
         <div className="px-6 py-4 border-t bg-slate-50 rounded-b-2xl flex items-center justify-between">
           {showAllErrors && invalidList.length > 0 && !readOnly ? (
-            <p className="text-sm text-red-600">
+            <p className="text-sm text-red-600" data-testid="summary-errors">
               • Còn {invalidList.length} lỗi — vui lòng kiểm tra các trường bôi đỏ.
             </p>
-          ) : <span />}
+          ) : <span data-testid="summary-none" />}
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -285,11 +295,8 @@ export default function ProductDialog({
               <button
                 type="submit"
                 form="product-form"
-                // không disable để user bấm lần đầu → mới bật showAllErrors
-                onClick={(e) => {
-                  (e.currentTarget.closest('div')?.previousElementSibling as HTMLFormElement)?.requestSubmit();
-                }}
                 className="px-4 py-2 rounded-lg bg-black text-white hover:opacity-90"
+                data-testid="btn-save"
               >
                 Lưu
               </button>
@@ -300,3 +307,5 @@ export default function ProductDialog({
     </div>
   );
 }
+
+export { validateProduct }; // export for direct unit tests to increase coverage
