@@ -26,3 +26,14 @@ pnpm run test:cov:both
 mvn -Dtest=AuthServiceTest test
 mvn -q clean test jacoco:report
 start "" ".\target\site\jacoco\index.html"
+
+--------- Cách chạy Cypress-----------
+## 🧪 Testing (Cypress)
+
+#### Cài đặt
+Hãy đảm bảo bạn đã cài đặt `pnpm` và các dependencies:
+
+```bash
+pnpm install
+pnpm exec cypress open
+pnpm cy:open(pnpm cy:run)
