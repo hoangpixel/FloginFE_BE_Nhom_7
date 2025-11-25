@@ -2,8 +2,7 @@
 const regexUsername = /^[a-zA-Z0-9_.-]+$/;
 const regexPassword1 = /\d/;
 const regexPassword2 = /[a-zA-Z]/;
-export const validateUsername = (username: string): string => 
-{
+export const validateUsername = (username) => {
     if(!username)
     {
         return 'username không được để trống';
@@ -25,8 +24,7 @@ export const validateUsername = (username: string): string =>
 }
 
 // unit test cho phần password  
-export const validatePassword = (password: string): string =>
-{
+export const validatePassword = (password) => {
     if(!password)
     {
         return 'password không được để trống';

@@ -1,5 +1,4 @@
-/// <reference types="jest" />
-import { validateUsername, validatePassword } from '../lib/validation';
+import { validateUsername, validatePassword } from '../utils/validation';
 
 describe('Login Validation Tests - validateUsername', () => {
     test('TC1: Username rong - nen tra loi', () => {

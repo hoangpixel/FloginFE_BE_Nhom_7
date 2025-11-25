@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import ProductsPage from './pages/ProductsPage';
-import type { ReactNode } from 'react';
 
-function RequireAuth({ children }: { children: ReactNode }) {
+function RequireAuth({ children }) {
   const token = localStorage.getItem('token');
   return token ? <>{children}</> : <Navigate to="/login" replace />;
 }

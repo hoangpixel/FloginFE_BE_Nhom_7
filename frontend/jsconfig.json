@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler", 
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "/*": ["./src/*"]
+    },
+    "checkJs": false,
+    "skipLibCheck": true
+  },
+  "include": ["src", "lib/axios.js"],
+  "exclude": ["node_modules", "dist", "build"]
+}
