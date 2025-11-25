@@ -1,6 +1,7 @@
 class ProductPage {
   
-  // --- Selectors ---
+  // --- 1. Selectors ---
+
   get inventoryItems() {
     return cy.get('.inventory_item');
   }
@@ -13,8 +14,15 @@ class ProductPage {
     return cy.get('.product_sort_container');
   }
 
-  // --- Actions ---
-  // Đảm bảo hàm này nằm TRONG dấu ngoặc {} của class
+  // 👇 QUAN TRỌNG: CÁI BẠN ĐANG THIẾU LÀ DÒNG NÀY 👇
+  get firstItemName() {
+    // Lấy tên sản phẩm đầu tiên trong danh sách (để kiểm tra Sort)
+    return cy.get('.inventory_item_name').first();
+  }
+  // 👆 ------------------------------------------ 👆
+
+  // --- 2. Actions ---
+
   addToCart(productName) {
     cy.contains('.inventory_item_name', productName) 
       .parents('.inventory_item')                    
@@ -34,5 +42,4 @@ class ProductPage {
   }
 }
 
-// ⚠️ QUAN TRỌNG: Phải có chữ 'new' và dấu '()'
 export default new ProductPage();
