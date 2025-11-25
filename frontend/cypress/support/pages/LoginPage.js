@@ -1,25 +1,31 @@
 class LoginPage {
-  // --- Selectors ---
+  // --- Khai báo các thành phần (Selectors) ---
+  // Giả định web của bạn sẽ có ô user, pass và nút login
   get txtUsername() {
-    return cy.get('#user-name');
+    return cy.get('#user-name'); 
   }
 
   get txtPassword() {
-    return cy.get('#password');
+    return cy.get('#password'); 
   }
 
   get btnLogin() {
-    return cy.get('#login-button');
+    return cy.get('#login-button'); 
   }
 
-  // --- Actions ---
-  visit() {  // <--- Hàm này phải nằm trong Class
-    cy.visit('https://www.saucedemo.com/');
+  get lblErrorMessage() {
+    return cy.get('[data-test="error"]');
+  }
+
+  // --- Các hành động (Actions) ---
+  
+  visit() {
+    cy.visit('https://www.saucedemo.com/'); 
   }
 
   login(username, password) {
-    this.txtUsername.type(username);
-    this.txtPassword.type(password);
+    this.txtUsername.clear().type(username); 
+    this.txtPassword.clear().type(password);
     this.btnLogin.click();
   }
 }
