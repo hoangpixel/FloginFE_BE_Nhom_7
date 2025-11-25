@@ -1,40 +1,46 @@
-name: End-to-End Login Tests
+name: Complete E2E Testing Pipeline (Login & Product)
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  cypress-run:
+  e2e-tests:
     runs-on: ubuntu-latest
-    
+
+    # 🔴 GIỮ NGUYÊN CÁI TÊN THƯ MỤC BẠN ĐÃ SỬA LÚC NÃY
     defaults:
       run:
         working-directory: ./frontend
 
     steps:
+      # 1. Tải code về
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # 2. Cài đặt môi trường Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # Lúc này lệnh npm install sẽ chạy đúng chỗ nhờ cái defaults ở trên
+      # 3. Cài đặt thư viện (npm install)
       - name: Install Dependencies
         run: npm install
 
-      - name: Verify Cypress
-        run: npx cypress verify
+      # 4. Chạy TOÀN BỘ Test (Cả Login lẫn Product)
+      # Lưu ý: Mình đã bỏ đoạn --spec "..." để nó tự chạy tất cả các file trong folder e2e
+      - name: Run All Cypress Tests
+        run: npx cypress run --browser chrome
 
-      - name: Run Cypress Tests
-        # Đảm bảo đường dẫn file test đúng so với vị trí thư mục con
-        run: npx cypress run --browser chrome --spec "cypress/e2e/loginTest.cy.js"
-
-      - name: Upload Artifacts
-        if: always()
+      # 5. Xuất báo cáo (Video/Ảnh chụp lỗi)
+      - name: Upload Test Artifacts
+        if: always() # Luôn chạy dù test fail
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-evidence
+          name: complete-test-reports
           path: |
             TÊN_THƯ_MỤC_CỦA_BẠN/cypress/videos
             TÊN_THƯ_MỤC_CỦA_BẠN/cypress/screenshots
