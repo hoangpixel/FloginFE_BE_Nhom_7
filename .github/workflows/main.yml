@@ -5,34 +5,36 @@ on: [push, pull_request]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./frontend
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Cài Node.js thủ công để đảm bảo môi trường
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # Chạy npm install (Bỏ qua lỗi lockfile nếu có)
+      # Lúc này lệnh npm install sẽ chạy đúng chỗ nhờ cái defaults ở trên
       - name: Install Dependencies
         run: npm install
 
-      # Verify Cypress
       - name: Verify Cypress
         run: npx cypress verify
 
-      # Chạy Test (Dùng lệnh trực tiếp thay vì Action có sẵn để dễ debug)
       - name: Run Cypress Tests
+        # Đảm bảo đường dẫn file test đúng so với vị trí thư mục con
         run: npx cypress run --browser chrome --spec "cypress/e2e/loginTest.cy.js"
 
-      # Lưu báo cáo nếu lỗi
       - name: Upload Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-evidence
           path: |
-            cypress/videos
-            cypress/screenshots
+            TÊN_THƯ_MỤC_CỦA_BẠN/cypress/videos
+            TÊN_THƯ_MỤC_CỦA_BẠN/cypress/screenshots
