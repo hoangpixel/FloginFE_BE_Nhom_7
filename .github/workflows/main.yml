@@ -1,0 +1,38 @@
+name: End-to-End Login Tests
+
+on: [push, pull_request]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Cài Node.js thủ công để đảm bảo môi trường
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Chạy npm install (Bỏ qua lỗi lockfile nếu có)
+      - name: Install Dependencies
+        run: npm install
+
+      # Verify Cypress
+      - name: Verify Cypress
+        run: npx cypress verify
+
+      # Chạy Test (Dùng lệnh trực tiếp thay vì Action có sẵn để dễ debug)
+      - name: Run Cypress Tests
+        run: npx cypress run --browser chrome --spec "cypress/e2e/loginTest.cy.js"
+
+      # Lưu báo cáo nếu lỗi
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-evidence
+          path: |
+            cypress/videos
+            cypress/screenshots
