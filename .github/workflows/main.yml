@@ -9,8 +9,7 @@ on:
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
-
-    # 🔴 GIỮ NGUYÊN CÁI TÊN THƯ MỤC BẠN ĐÃ SỬA LÚC NÃY
+    
     defaults:
       run:
         working-directory: ./frontend
@@ -20,27 +19,34 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Cài đặt môi trường Node.js
+      # 2. Cài đặt pnpm (Bắt buộc phải có bước này nếu dùng pnpm)
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # 3. Cài đặt môi trường Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
-      # 3. Cài đặt thư viện (npm install)
+      # 4. Cài đặt thư viện (Dùng pnpm thay vì npm)
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
-      # 4. Chạy TOÀN BỘ Test (Cả Login lẫn Product)
-      # Lưu ý: Mình đã bỏ đoạn --spec "..." để nó tự chạy tất cả các file trong folder e2e
+      # 5. Chạy TOÀN BỘ Test (Dùng lệnh script vừa thêm vào package.json)
       - name: Run All Cypress Tests
-        run: npx cypress run --browser chrome
+        run: pnpm run test:e2e
 
-      # 5. Xuất báo cáo (Video/Ảnh chụp lỗi)
+      # 6. Xuất báo cáo (Sửa lại đường dẫn cho đúng context ./frontend)
       - name: Upload Test Artifacts
-        if: always() # Luôn chạy dù test fail
+        if: always() 
         uses: actions/upload-artifact@v4
         with:
           name: complete-test-reports
           path: |
-            TÊN_THƯ_MỤC_CỦA_BẠN/cypress/videos
-            TÊN_THƯ_MỤC_CỦA_BẠN/cypress/screenshots
+            frontend/cypress/videos
+            frontend/cypress/screenshots
