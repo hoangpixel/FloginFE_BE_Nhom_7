@@ -5,20 +5,20 @@ const regexPassword2 = /[a-zA-Z]/;
 export const validateUsername = (username) => {
     if(!username)
     {
-        return 'username không được để trống';
+        return 'username khong duoc de trong';
     }
     if(username.length < 3)
     {
-        return 'username phải có ít nhất 3 ký tự trở lên';
+        return 'username phai co it nhat 3 ky tu tro len';
     }
     if(username.length > 50)
     {
-        return 'username không được vượt quá 50 ký tự';
+        return 'username khong duoc vuot qua 50 ky tu';
     }
 
     if(!regexUsername.test(username))
     {
-        return 'username không được chứa các ký tự đặc biệt';
+        return 'username khong duoc chua cac ky tu dac biet';
     }
     return '';
 }
@@ -27,19 +27,19 @@ export const validateUsername = (username) => {
 export const validatePassword = (password) => {
     if(!password)
     {
-        return 'password không được để trống';
+        return 'password khong duoc de trong';
     }
     if(password.length < 6)
     {
-        return 'password phải có ít nhất 6 ký tự trở lên';
+        return 'password phai co it nhat 6 ky tu tro len';
     }
     if(password.length > 100)
     {
-        return 'password không được vượt quá 100 ký tự';
+        return 'password khong duoc vuot qua 100 ky tu';
     }
     if(!regexPassword1.test(password) || !regexPassword2.test(password))
     {
-        return 'password phải có cả chữ lẫn số';
+        return 'password phai co ca chu lan so';
     }
     return '';
 }

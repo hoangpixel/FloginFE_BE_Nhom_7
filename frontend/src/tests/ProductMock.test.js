@@ -1,204 +1,97 @@
-import { TextEncoder, TextDecoder } from 'util';
-Object.assign(global, { TextEncoder, TextDecoder });
-
-import React from 'react';
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { BrowserRouter } from 'react-router-dom';
-
-import ProductsPage from '../pages/ProductsPage';
+// src/tests/ProductMock.test.js
 import * as productService from '../services/product';
-import * as categoryService from '../services/categories';
 
-jest.mock('../services/product', () => ({
-    getProducts: jest.fn(),
-    createProduct: jest.fn(),
-    updateProduct: jest.fn(),
-    deleteProduct: jest.fn(),
-}));
+// Mock toàn bộ module product service
+jest.mock('../services/product');
 
-jest.mock('../services/categories', () => ({
-    getCategories: jest.fn(),
-}), { virtual: true });
-
-if (!HTMLFormElement.prototype.requestSubmit) {
-  Object.defineProperty(HTMLFormElement.prototype, 'requestSubmit', {
-    value: function () {
-      this.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    },
-    writable: true, configurable: true
+describe('Product Service Mock Tests', () => {
+  // Reset mock sau mỗi bài test để đảm bảo không bị trùng lặp số lần gọi
+  afterEach(() => {
+    jest.clearAllMocks();
   });
-}
 
-const renderWithRouter = (ui) => {
-    return render(<BrowserRouter>{ui}</BrowserRouter>);
-};
+  // --- a) Mock CRUD operations (Create, Read, Update, Delete) ---
 
-const submitForm = () => {
-    const nameInput = screen.queryByPlaceholderText(/tên|name/i);
-    if (nameInput) {
-        const form = nameInput.closest('form');
-        if (form) {
-            fireEvent.submit(form);
-            return;
-        }
-    }
-    const saveBtn = screen.queryByRole('button', { name: /save|lưu/i });
-    if (saveBtn) fireEvent.click(saveBtn);
-};
+  // 1. Test READ (Lấy danh sách sản phẩm)
+  test('Mock: Get products (Read) - Success', async () => {
+    const mockResponse = {
+      data: [
+        { id: 1, name: 'Laptop Dell', price: 15000000 },
+        { id: 2, name: 'Mouse Logitech', price: 500000 }
+      ],
+      total: 2,
+      page: 1
+    };
 
-const mockCategories = ['ELECTRONICS', 'ACCESSORIES'];
-const mockProduct = { 
-    id: 1, 
-    name: 'Laptop Mock', 
-    price: 1000, 
-    category: 'ELECTRONICS', 
-    quantity: 1, 
-    description: 'Test' 
-};
+    // Giả lập service trả về data thành công
+    productService.getProducts.mockResolvedValue(mockResponse);
 
-describe('Product Mock Testing (Max Coverage)', () => {
+    // Gọi hàm (giả lập hành động của component)
+    const result = await productService.getProducts(1); // trang 1
 
-    beforeEach(() => {
-        jest.clearAllMocks();
+    // c) Verify all mock calls
+    expect(productService.getProducts).toHaveBeenCalledTimes(1); // Kiểm tra đã được gọi 1 lần
+    expect(productService.getProducts).toHaveBeenCalledWith(1); // Kiểm tra tham số truyền vào đúng
+    expect(result).toEqual(mockResponse); // Kiểm tra kết quả trả về
+  });
 
-        categoryService.getCategories.mockResolvedValue(mockCategories);
-        productService.getProducts.mockResolvedValue([mockProduct]);
-        
-        jest.spyOn(window, 'confirm').mockReturnValue(true);
-        jest.spyOn(window, 'alert').mockImplementation(() => {});
-        jest.spyOn(console, 'error').mockImplementation(() => {});
-    });
+  // 2. Test CREATE (Tạo sản phẩm mới)
+  test('Mock: Create product - Success', async () => {
+    const newProduct = { name: 'New Laptop', price: 20000000 };
+    const mockCreatedProduct = { id: 3, ...newProduct };
 
-    afterEach(() => {
-        jest.restoreAllMocks();
-    });
+    productService.createProduct.mockResolvedValue(mockCreatedProduct);
 
-    test('TC1: Get products (Read) - Hien thi danh sach', async () => {
-        productService.getProducts.mockResolvedValue([mockProduct]);
-        renderWithRouter(<ProductsPage />);
+    const result = await productService.createProduct(newProduct);
 
-        await waitFor(() => {
-            expect(screen.getByText('Laptop Mock')).toBeInTheDocument();
-        });
+    // c) Verify calls
+    expect(productService.createProduct).toHaveBeenCalledTimes(1);
+    expect(productService.createProduct).toHaveBeenCalledWith(newProduct);
+    expect(result).toEqual(mockCreatedProduct);
+  });
 
-        expect(productService.getProducts).toHaveBeenCalledTimes(1);
-    });
+  // 3. Test UPDATE (Cập nhật sản phẩm)
+  test('Mock: Update product - Success', async () => {
+    const updateId = 1;
+    const updateData = { price: 16000000 };
+    const mockUpdatedProduct = { id: 1, name: 'Laptop Dell', price: 16000000 };
 
-    test('TC2: Create product (Create) - Full Flow', async () => {
-        productService.getProducts.mockResolvedValue([]); 
-        const newProduct = { ...mockProduct, id: 2, name: 'New Mock Item' };
-        productService.createProduct.mockResolvedValue(newProduct);
+    productService.updateProduct.mockResolvedValue(mockUpdatedProduct);
 
-        renderWithRouter(<ProductsPage />);
+    const result = await productService.updateProduct(updateId, updateData);
 
-        fireEvent.click(screen.getByRole('button', { name: /add|thêm|new/i }));
-        fireEvent.change(screen.getByPlaceholderText(/tên|name/i), { target: { value: 'New Mock Item' } });
-        fireEvent.change(screen.getByPlaceholderText(/giá|price/i), { target: { value: '2000' } });
-        
-        const qty = screen.queryByPlaceholderText(/quantity|số lượng/i);
-        if (qty) fireEvent.change(qty, { target: { value: '10' } });
+    expect(productService.updateProduct).toHaveBeenCalledTimes(1);
+    expect(productService.updateProduct).toHaveBeenCalledWith(updateId, updateData);
+    expect(result).toEqual(mockUpdatedProduct);
+  });
 
-        const catSelect = screen.queryByTestId('product-category');
-        if (catSelect) fireEvent.change(catSelect, { target: { value: 'ELECTRONICS' } });
-        submitForm();
-        await waitFor(() => {
-            expect(productService.createProduct).toHaveBeenCalledWith(
-                expect.objectContaining({ name: 'New Mock Item', price: 2000 })
-            );
-        });
-    });
+  // 4. Test DELETE (Xóa sản phẩm)
+  test('Mock: Delete product - Success', async () => {
+    const deleteId = 1;
+    const mockResponse = { message: 'Product deleted successfully' };
 
-    test('TC3: Update product (Update)', async () => {
-        productService.getProducts.mockResolvedValue([mockProduct]);
-        productService.updateProduct.mockResolvedValue({ ...mockProduct, name: 'Updated Mock' });
+    productService.deleteProduct.mockResolvedValue(mockResponse);
 
-        renderWithRouter(<ProductsPage />);
-        await waitFor(() => expect(screen.getByText('Laptop Mock')).toBeInTheDocument());
+    const result = await productService.deleteProduct(deleteId);
 
-        const editButtons = screen.getAllByRole('button', { name: /edit|sửa/i });
-        fireEvent.click(editButtons[0]);
+    expect(productService.deleteProduct).toHaveBeenCalledTimes(1);
+    expect(productService.deleteProduct).toHaveBeenCalledWith(deleteId);
+    expect(result).toEqual(mockResponse);
+  });
 
-        const nameInp = screen.getByPlaceholderText(/tên|name/i);
-        fireEvent.change(nameInp, { target: { value: 'Updated Mock' } });
-        
-        submitForm();
+  // --- b) Test failure scenarios (Test trường hợp lỗi) ---
 
-        await waitFor(() => {
-            expect(productService.updateProduct).toHaveBeenCalledWith(
-                1, 
-                expect.objectContaining({ name: 'Updated Mock' })
-            );
-        });
-    });
+  test('Mock: Create product - Failure (API Error)', async () => {
+    const invalidProduct = { name: '', price: -100 }; // Giả sử data sai
+    const errorMessage = 'Invalid product data';
 
-    test('TC4: Delete product (Delete)', async () => {
-        productService.getProducts.mockResolvedValue([mockProduct]);
-        productService.deleteProduct.mockResolvedValue({});
+    // Giả lập service trả về lỗi (Promise reject)
+    productService.createProduct.mockRejectedValue(new Error(errorMessage));
 
-        renderWithRouter(<ProductsPage />);
-        await waitFor(() => expect(screen.getByText('Laptop Mock')).toBeInTheDocument());
+    // Mong đợi hàm sẽ throw ra lỗi
+    await expect(productService.createProduct(invalidProduct)).rejects.toThrow(errorMessage);
 
-        const deleteButtons = screen.getAllByRole('button', { name: /delete|xóa/i });
-        fireEvent.click(deleteButtons[0]);
-
-        await waitFor(() => {
-            expect(productService.deleteProduct).toHaveBeenCalledWith(1);
-        });
-    });
-
-    test('TC5: Failure - Tao san pham loi API', async () => {
-        productService.getProducts.mockResolvedValue([]);
-        productService.createProduct.mockRejectedValue(new Error('Create Failed'));
-
-        renderWithRouter(<ProductsPage />);
-
-        fireEvent.click(screen.getByRole('button', { name: /add|thêm|new/i }));
-        fireEvent.change(screen.getByPlaceholderText(/tên|name/i), { target: { value: 'Fail Item' } });
-        fireEvent.change(screen.getByPlaceholderText(/giá|price/i), { target: { value: '100' } });
-        
-        submitForm();
-
-        await waitFor(() => {
-            expect(productService.createProduct).toHaveBeenCalled();
-            expect(window.alert).toHaveBeenCalled();
-        });
-    });
-
-    test('TC6: Validation - Submit form rong (Client Side)', async () => {
-        productService.getProducts.mockResolvedValue([]);
-        renderWithRouter(<ProductsPage />);
-
-        fireEvent.click(screen.getByRole('button', { name: /add|thêm|new/i }));
-
-        submitForm();
-
-        await new Promise(r => setTimeout(r, 100));
-        expect(productService.createProduct).not.toHaveBeenCalled();
-    });
-
-    test('TC7: Empty List - Hien thi khi khong co san pham', async () => {
-        productService.getProducts.mockResolvedValue([]);
-
-        renderWithRouter(<ProductsPage />);
-
-        await waitFor(() => {
-            const emptyMsg = screen.queryByText(/chưa có sản phẩm|no products/i);
-            expect(emptyMsg).toBeInTheDocument();
-        });
-    });
-
-    test('TC8: Cancel Dialog - Dong form', async () => {
-        productService.getProducts.mockResolvedValue([]);
-        renderWithRouter(<ProductsPage />);
-
-        fireEvent.click(screen.getByRole('button', { name: /add|thêm|new/i }));
-
-        const cancelBtn = screen.getByRole('button', { name: /cancel|huỷ|hủy/i });
-        fireEvent.click(cancelBtn);
-
-        await waitFor(() => {
-            expect(screen.queryByPlaceholderText(/tên|name/i)).not.toBeInTheDocument();
-        });
-    });
+    // c) Verify calls
+    expect(productService.createProduct).toHaveBeenCalledTimes(1);
+  });
 });

@@ -5,7 +5,7 @@ import api from '../../lib/axios';
  * @param {Object} body - { username, password }
  * @returns {Promise<Object>} - Luôn trả về object { success, message, token?, username? }
  */
-export async function login(body) {
+export async function loginUser(body) {
   try {
     // Gọi API, axios trả về object có thuộc tính 'data'
     const { data } = await api.post('/auth/login', body);
