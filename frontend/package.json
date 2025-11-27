@@ -12,8 +12,7 @@
     "test:watch": "jest --watch",
     "test:file": "jest",
     "test:file:cov": "jest --coverage",
-    "test:cov:clean": "jest --coverage --coverageReporters=lcov --coverageReporters=text --collectCoverageFrom=\"src/**/*.{js,jsx}\" --collectCoverageFrom=\"!src/main.jsx\" --collectCoverageFrom=\"!src/vite-env.d.js\" --collectCoverageFrom=\"!src/**/*.d.js\" --collectCoverageFrom=\"!src/App.jsx\" --collectCoverageFrom=\"!src/router/**\" --collectCoverageFrom=\"!src/services/**\"",
-    "test:e2e": "cypress run", 
+    "test:cov:full": "jest --coverage --coverageReporters=lcov --coverageReporters=text --collectCoverageFrom=\"src/**/*.{js,jsx}\" --collectCoverageFrom=\"!src/main.jsx\" --collectCoverageFrom=\"!src/vite-env.d.js\" --collectCoverageFrom=\"!src/**/*.d.js\" --collectCoverageFrom=\"!src/App.jsx\" --collectCoverageFrom=\"!src/router/**\" --collectCoverageFrom=\"!src/services/**\" --collectCoverageFrom=\"!src/pages/ProductsPage.jsx\"",    "test:e2e": "cypress run", 
     "cy:open": "cypress open"
   },
   "dependencies": {

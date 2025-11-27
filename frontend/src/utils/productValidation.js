@@ -16,7 +16,6 @@ export const VALID_CATEGORIES = [
 
     // --- 1. Validate Name ---
     if (!name || name.trim() === '') {
-        // Text khớp PDF trang 11 (không dấu)
         errors.name = 'Ten san pham khong duoc de trong';
     } else {
         const nameLength = name.trim().length;
@@ -31,7 +30,6 @@ export const VALID_CATEGORIES = [
     } else if (typeof price !== 'number' || isNaN(price)) {
          errors.price = 'Gia san pham phai la so';
     } else if (price <= 0) {
-        // Text khớp PDF trang 11
         errors.price = 'Gia san pham phai lon hon 0';
     } else if (price > MAX_PRICE) {
         errors.price = `Gia san pham khong duoc vuot qua ${MAX_PRICE}`;

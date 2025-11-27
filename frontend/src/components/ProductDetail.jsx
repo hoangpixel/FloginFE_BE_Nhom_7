@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// --- SỬA Ở ĐÂY: Xóa chữ 'default', chuyển thành Named Export ---
 export function ProductDetail({ product, onClose, onEdit }) {
     if (!product) return null;
 
@@ -18,7 +17,7 @@ export function ProductDetail({ product, onClose, onEdit }) {
                     <div><span className="font-bold">Danh mục:</span> {product.category}</div>
                     <div>
                         <span className="font-bold block">Mô tả:</span> 
-                        <p className="bg-gray-50 p-2 rounded mt-1">{product.description || '(Không có)'}</p>
+                        <p className="bg-gray-50 p-2 rounded mt-1">{product.description || '(Khong co)'}</p>
                     </div>
                 </div>
 
@@ -27,7 +26,6 @@ export function ProductDetail({ product, onClose, onEdit }) {
                         <button 
                             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                             onClick={() => onEdit(product)}
-                            // Test case tìm text /Sửa/i nên text này quan trọng
                             data-testid="btn-edit"
                         >
                             Sửa
