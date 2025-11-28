@@ -2,13 +2,10 @@ import { render, screen, fireEvent, waitFor, act } from "@testing-library/react"
 import React from "react";
 import Login from "../components/Login";
 import "@testing-library/jest-dom";
-// 1. Thay đổi cách import cho giống đề bài
 import * as authService from "../services/auth";
 
-// 2. Mock toàn bộ module (Style đề bài)
 jest.mock("../services/auth");
 
-// 3. Mock Navigate (Vẫn phải giữ để chạy được)
 const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"),
@@ -18,8 +15,7 @@ jest.mock("react-router-dom", () => ({
 describe("Login Mock Tests", () => {
 
     beforeEach(() => {
-        // Reset toàn bộ mock (Style đề bài)
-        jest.clearAllMocks();
+\        jest.clearAllMocks();
     });
 
     test("TC1: Render giao dien form ban dau", () => {
@@ -71,7 +67,6 @@ test("TC3: Hien thi loi khi submit form rong", async () => {
     });
 
     test("TC6: Goi API khi submit form hop le", async () => {
-        // Setup mock theo style đề bài
         authService.loginUser.mockResolvedValue({ 
             success: true, message: 'ok', token: 'token', username: 'user' 
         });
@@ -88,7 +83,6 @@ test("TC3: Hien thi loi khi submit form rong", async () => {
     });
 
     test("TC7: Hien thi trang thai Loading khi dang gui", async () => {
-        // Setup mock implementation
         authService.loginUser.mockImplementation(
             () => new Promise((res) => setTimeout(() => res({ success: true }), 200))
         );
@@ -103,7 +97,6 @@ test("TC3: Hien thi loi khi submit form rong", async () => {
     });
 
     test("TC8: Loi backend tra ve that bai", async () => {
-        // Setup mock trả về thất bại
         authService.loginUser.mockResolvedValue({
             success: false,
             message: "Sai username hoac password",
@@ -137,7 +130,6 @@ test("TC3: Hien thi loi khi submit form rong", async () => {
             expect(screen.getByTestId("login-message")).toHaveTextContent(/thanh cong|thành công/i)
         );
         
-        // Bọc act để tránh warning
         act(() => {
             jest.runAllTimers();
         });
