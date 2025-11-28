@@ -39,7 +39,7 @@ jobs:
 
       # 5. Chạy TOÀN BỘ Test (Login, Product & Security)
       - name: Run All Cypress E2E Tests
-        run: pnpm run test:e2e
+        run: npx start-server-and-test dev http://localhost:5173 "pnpm run test:e2e:ci"
 
       # 6. Xuất báo cáo (Sửa lại đường dẫn cho đúng context ./frontend)
       - name: Upload Test Artifacts
