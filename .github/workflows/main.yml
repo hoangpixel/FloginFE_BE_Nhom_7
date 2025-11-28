@@ -10,38 +10,50 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     
-    defaults:
-      run:
-        working-directory: ./frontend
-
     steps:
       # 1. Tải code về
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Cài đặt pnpm (Bắt buộc phải có bước này nếu dùng pnpm)
+      # 2. Cài đặt pnpm
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      # 3. Cài đặt môi trường Node.js
+      # 3. Cài đặt Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-          cache-dependency-path: frontend/pnpm-lock.yaml
+          # Nếu file lock nằm trong subfolder, dòng dưới có thể gây lỗi warning, có thể bỏ qua
+          # cache-dependency-path: '**/pnpm-lock.yaml'
 
-      # 4. Cài đặt thư viện (Dùng pnpm thay vì npm)
-      - name: Install Dependencies
+      # --- BƯỚC 1: KHỞI ĐỘNG BACKEND (Bắt buộc để test Login) ---
+      - name: Install & Start Backend
+        working-directory: ./backend   # <--- Đảm bảo tên thư mục đúng là 'backend'
+        run: |
+          pnpm install
+          pnpm start &                 # Chạy ngầm server Backend
+          echo "Backend is starting..."
+          sleep 15                     # Đợi 15 giây cho Backend lên hẳn
+
+      # --- BƯỚC 2: CÀI ĐẶT FRONTEND ---
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
-      # 5. Chạy TOÀN BỘ Test (Login, Product & Security)
+      # --- BƯỚC 3: CHẠY TEST (Đã sửa lệnh để tránh lỗi lặp script) ---
       - name: Run All Cypress E2E Tests
-        run: npx start-server-and-test dev http://localhost:5173 "pnpm run test:e2e:ci"
+        working-directory: ./frontend
+        # Giải thích lệnh:
+        # 1. 'dev': Tên lệnh chạy server frontend trong package.json (thường là vite)
+        # 2. 'http://localhost:5173': Đợi trang web lên
+        # 3. 'pnpm exec cypress run': Chạy thẳng Cypress (không qua script trung gian để tránh lỗi)
+        run: npx start-server-and-test dev http://localhost:5173 "pnpm exec cypress run"
 
-      # 6. Xuất báo cáo (Sửa lại đường dẫn cho đúng context ./frontend)
+      # 4. Xuất báo cáo kết quả
       - name: Upload Test Artifacts
         if: always() 
         uses: actions/upload-artifact@v4
