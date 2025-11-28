@@ -27,8 +27,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
-          # Nếu file lock nằm trong subfolder, dòng dưới có thể gây lỗi warning, có thể bỏ qua
-          # cache-dependency-path: '**/pnpm-lock.yaml'
+          cache-dependency-path: '**/pnpm-lock.yaml'
 
       # --- BƯỚC 1: KHỞI ĐỘNG BACKEND (Bắt buộc để test Login) ---
       - name: Install & Start Backend
