@@ -128,4 +128,100 @@ describe("ProductList Component Tests", () => {
         expect(screen.getByText("Qty")).toBeInTheDocument();
         expect(screen.getByText("Category")).toBeInTheDocument();
     });
+
+    test("TC9: Hien thi phan trang khi totalPages > 1", () => {
+        const onPageChange = jest.fn();
+        render(
+            <ProductList
+                items={mockProducts}
+                onView={mockOnView}
+                onEdit={mockOnEdit}
+                onDelete={mockOnDelete}
+                currentPage={1}
+                totalPages={3}
+                onPageChange={onPageChange}
+            />
+        );
+        expect(screen.getByTestId('pagination-controls')).toBeInTheDocument();
+        expect(screen.getByTestId('page-btn-1')).toBeInTheDocument();
+        expect(screen.getByTestId('page-btn-2')).toBeInTheDocument();
+    });
+
+    test("TC10: Click vao so trang goi onPageChange dung gia tri", () => {
+        const onPageChange = jest.fn();
+        render(
+            <ProductList
+                items={mockProducts}
+                onView={mockOnView}
+                onEdit={mockOnEdit}
+                onDelete={mockOnDelete}
+                currentPage={1}
+                totalPages={3}
+                onPageChange={onPageChange}
+            />
+        );
+        fireEvent.click(screen.getByTestId('page-btn-2'));
+        expect(onPageChange).toHaveBeenCalledWith(2);
+    });
+
+    test("TC11: Previous disabled o trang 1 va khong goi onPageChange", () => {
+        const onPageChange = jest.fn();
+        render(
+            <ProductList
+                items={mockProducts}
+                onView={mockOnView}
+                onEdit={mockOnEdit}
+                onDelete={mockOnDelete}
+                currentPage={1}
+                totalPages={2}
+                onPageChange={onPageChange}
+            />
+        );
+        const prevBtn = screen.getByText(/Trang trước/i);
+        expect(prevBtn).toBeDisabled();
+        fireEvent.click(prevBtn);
+        expect(onPageChange).not.toHaveBeenCalled();
+    });
+
+    test("TC12: Next disabled o trang cuoi va khong goi onPageChange", () => {
+        const onPageChange = jest.fn();
+        render(
+            <ProductList
+                items={mockProducts}
+                onView={mockOnView}
+                onEdit={mockOnEdit}
+                onDelete={mockOnDelete}
+                currentPage={3}
+                totalPages={3}
+                onPageChange={onPageChange}
+            />
+        );
+        const nextBtn = screen.getByText(/Trang sau/i);
+        expect(nextBtn).toBeDisabled();
+        fireEvent.click(nextBtn);
+        expect(onPageChange).not.toHaveBeenCalled();
+    });
+
+    test("TC13: Previous & Next hoat dong o trang giua", () => {
+        const onPageChange = jest.fn();
+        render(
+            <ProductList
+                items={mockProducts}
+                onView={mockOnView}
+                onEdit={mockOnEdit}
+                onDelete={mockOnDelete}
+                currentPage={2}
+                totalPages={3}
+                onPageChange={onPageChange}
+            />
+        );
+        const prevBtn = screen.getByText(/Trang trước/i);
+        const nextBtn = screen.getByText(/Trang sau/i);
+        expect(prevBtn).not.toBeDisabled();
+        expect(nextBtn).not.toBeDisabled();
+        fireEvent.click(prevBtn);
+        fireEvent.click(nextBtn);
+        expect(onPageChange).toHaveBeenCalledWith(1);
+        expect(onPageChange).toHaveBeenCalledWith(3);
+    });
 });

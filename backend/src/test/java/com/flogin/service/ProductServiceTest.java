@@ -76,7 +76,7 @@ class ProductServiceTest {
     req.setCategory(null);
     ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.createProduct(req));
     assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
-    assertEquals("Category la bat buoc", ex.getReason());
+    assertEquals("Category là bắt buộc", ex.getReason());
   }
   @Test @DisplayName("createProduct: invalid category -> 400")
   void testCreateProductInvalidCategory() {
@@ -84,7 +84,7 @@ class ProductServiceTest {
     req.setCategory("invalid-cat");
     ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.createProduct(req));
     assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
-    assertEquals("Category khong hop le", ex.getReason());
+    assertEquals("Category không hợp lệ", ex.getReason());
   }
   @Test @DisplayName("getProduct: found")
   void testGetProductFound() {
@@ -99,6 +99,7 @@ class ProductServiceTest {
     when(repo.findById(99L)).thenReturn(Optional.empty());
     ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.getProduct(99L));
     assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+    assertEquals("Không tìm thấy sản phẩm", ex.getReason());
   }
   @Test @DisplayName("updateProduct: success")
   void testUpdateProductSuccess() {
@@ -120,7 +121,7 @@ class ProductServiceTest {
     req.setCategory("bad");
     ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.updateProduct(1L, req));
     assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
-    assertEquals("Category khong hop le", ex.getReason());
+    assertEquals("Category không hợp lệ", ex.getReason());
   }
   @Test @DisplayName("updateProduct: not found -> 404")
   void testUpdateProductNotFound() {
@@ -128,6 +129,7 @@ class ProductServiceTest {
     ProductRequest req = buildRequest();
     ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.updateProduct(123L, req));
     assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+    assertEquals("Không tìm thấy sản phẩm", ex.getReason());
   }
   @Test @DisplayName("deleteProduct: success")
   void testDeleteProductSuccess() {
@@ -141,6 +143,7 @@ class ProductServiceTest {
     when(repo.existsById(55L)).thenReturn(false);
     ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.deleteProduct(55L));
     assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+    assertEquals("Không tìm thấy sản phẩm", ex.getReason());
   }
   @Test @DisplayName("getAll: pagination")
   void testGetAllPagination() {
@@ -159,6 +162,6 @@ class ProductServiceTest {
   @Test @DisplayName("getAll: null pageable -> NPE")
   void testGetAllNullPageable() {
     NullPointerException ex = assertThrows(NullPointerException.class, () -> service.getAll(null));
-    assertEquals("pageable khong duoc null", ex.getMessage());
+    assertEquals("pageable không được null", ex.getMessage());
   }
 }
