@@ -1,7 +1,5 @@
-// src/tests/ProductMock.test.js
 import * as productService from '../services/product';
 
-// Mock toàn bộ module product service
 jest.mock('../services/product');
 
 describe('Product Service Mock Tests', () => {
@@ -10,10 +8,9 @@ describe('Product Service Mock Tests', () => {
     jest.clearAllMocks();
   });
 
-  // --- a) Mock CRUD operations (Create, Read, Update, Delete) ---
+  // a) Mock CRUD operations (Create, Read, Update, Delete)
 
-  // 1. Test READ (Lấy danh sách sản phẩm)
-  test('Mock: Get products (Read) - Success', async () => {
+  test('TC1: Mock - Get products (Read)', async () => {
     const mockResponse = {
       data: [
         { id: 1, name: 'Laptop Dell', price: 15000000 },
@@ -23,20 +20,16 @@ describe('Product Service Mock Tests', () => {
       page: 1
     };
 
-    // Giả lập service trả về data thành công
     productService.getProducts.mockResolvedValue(mockResponse);
 
-    // Gọi hàm (giả lập hành động của component)
-    const result = await productService.getProducts(1); // trang 1
+    const result = await productService.getProducts(1);
 
-    // c) Verify all mock calls
-    expect(productService.getProducts).toHaveBeenCalledTimes(1); // Kiểm tra đã được gọi 1 lần
-    expect(productService.getProducts).toHaveBeenCalledWith(1); // Kiểm tra tham số truyền vào đúng
-    expect(result).toEqual(mockResponse); // Kiểm tra kết quả trả về
+    expect(productService.getProducts).toHaveBeenCalledTimes(1);
+    expect(productService.getProducts).toHaveBeenCalledWith(1);
+    expect(result).toEqual(mockResponse);
   });
 
-  // 2. Test CREATE (Tạo sản phẩm mới)
-  test('Mock: Create product - Success', async () => {
+  test('TC2: Mock - Create product', async () => {
     const newProduct = { name: 'New Laptop', price: 20000000 };
     const mockCreatedProduct = { id: 3, ...newProduct };
 
@@ -44,14 +37,12 @@ describe('Product Service Mock Tests', () => {
 
     const result = await productService.createProduct(newProduct);
 
-    // c) Verify calls
     expect(productService.createProduct).toHaveBeenCalledTimes(1);
     expect(productService.createProduct).toHaveBeenCalledWith(newProduct);
     expect(result).toEqual(mockCreatedProduct);
   });
 
-  // 3. Test UPDATE (Cập nhật sản phẩm)
-  test('Mock: Update product - Success', async () => {
+  test('TC3: Mock - Update product', async () => {
     const updateId = 1;
     const updateData = { price: 16000000 };
     const mockUpdatedProduct = { id: 1, name: 'Laptop Dell', price: 16000000 };
@@ -65,8 +56,7 @@ describe('Product Service Mock Tests', () => {
     expect(result).toEqual(mockUpdatedProduct);
   });
 
-  // 4. Test DELETE (Xóa sản phẩm)
-  test('Mock: Delete product - Success', async () => {
+  test('TC4: Mock - Delete product', async () => {
     const deleteId = 1;
     const mockResponse = { message: 'Product deleted successfully' };
 
@@ -79,16 +69,14 @@ describe('Product Service Mock Tests', () => {
     expect(result).toEqual(mockResponse);
   });
 
-  // --- b) Test failure scenarios (Test trường hợp lỗi) ---
+  // b) Test failure scenarios (Test trường hợp lỗi)
 
-  test('Mock: Create product - Failure (API Error)', async () => {
-    const invalidProduct = { name: '', price: -100 }; // Giả sử data sai
+  test('TC5: Mock - Create product - Failure (API Error)', async () => {
+    const invalidProduct = { name: '', price: -100 };
     const errorMessage = 'Invalid product data';
 
-    // Giả lập service trả về lỗi (Promise reject)
     productService.createProduct.mockRejectedValue(new Error(errorMessage));
 
-    // Mong đợi hàm sẽ throw ra lỗi
     await expect(productService.createProduct(invalidProduct)).rejects.toThrow(errorMessage);
 
     // c) Verify calls
