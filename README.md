@@ -70,7 +70,7 @@ Frontend chạy tại: **http://localhost:5173**
 |----------|------|
 | Chạy test 1 file cụ thể | `pnpm test:file "tên_file"` |
 | Chạy coverage 1 file | `pnpm test:file:cov "tên_file"` |
-| Chạy coverage toàn bộ | `pnpm test:cov:clean` |
+| Chạy coverage toàn bộ | `pnpm test:cov:full` |
 | Xem báo cáo coverage (Windows) | `start "" ".\\coverage\\lcov-report\\index.html"` |
 
 ---
