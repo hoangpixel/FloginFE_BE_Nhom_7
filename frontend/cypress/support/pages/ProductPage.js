@@ -2,44 +2,95 @@ class ProductPage {
   
   // --- 1. Selectors ---
 
-  get inventoryItems() {
-    return cy.get('.inventory_item');
+  get productTable() {
+    return cy.get('[data-testid="product-table"]', { timeout: 10000 });
   }
 
-  get cartBadge() {
-    return cy.get('.shopping_cart_badge');
+  get productItems() {
+    return cy.get('[data-testid="product-item"]');
   }
 
-  get sortDropdown() {
-    return cy.get('.product_sort_container');
+  get btnAddProduct() {
+    return cy.get('[data-testid="add-product-btn"]');
   }
 
-  // 👇 QUAN TRỌNG: CÁI BẠN ĐANG THIẾU LÀ DÒNG NÀY 👇
-  get firstItemName() {
-    // Lấy tên sản phẩm đầu tiên trong danh sách (để kiểm tra Sort)
-    return cy.get('.inventory_item_name').first();
+  get btnEdit() {
+    return cy.get('[data-testid="edit-btn"]');
   }
-  // 👆 ------------------------------------------ 👆
+
+  get btnDelete() {
+    return cy.get('[data-testid="delete-btn"]');
+  }
+
+  get btnView() {
+    return cy.get('[data-testid="view-btn"]');
+  }
+
+  // Form fields
+  get txtProductName() {
+    return cy.get('[data-testid="product-name"]');
+  }
+
+  get txtProductPrice() {
+    return cy.get('[data-testid="product-price"]');
+  }
+
+  get txtProductQuantity() {
+    return cy.get('[data-testid="product-quantity"]');
+  }
+
+  get selectCategory() {
+    return cy.get('[data-testid="product-category"]');
+  }
+
+  get txtDescription() {
+    return cy.get('[data-testid="product-description"]');
+  }
+
+  get btnSubmit() {
+    return cy.get('[data-testid="submit-button"]');
+  }
 
   // --- 2. Actions ---
 
-  addToCart(productName) {
-    cy.contains('.inventory_item_name', productName) 
-      .parents('.inventory_item')                    
-      .find('button')                                
-      .click();                                      
+  visit() {
+    cy.visit('http://localhost:5173/products');
   }
 
-  removeFromCart(productName) {
-    cy.contains('.inventory_item_name', productName)
-      .parents('.inventory_item')
-      .find('button')
-      .click(); 
+  addProduct(name, price, quantity, category, description) {
+    this.btnAddProduct.click();
+    
+    // Đợi form hiển thị
+    cy.get('[data-testid="product-form"]', { timeout: 5000 }).should('be.visible');
+    
+    this.txtProductName.type(name);
+    this.txtProductPrice.clear().type(price);
+    this.txtProductQuantity.clear().type(quantity);
+    if (category) {
+      this.selectCategory.select(category);
+    }
+    if (description) {
+      this.txtDescription.type(description);
+    }
+    this.btnSubmit.click();
   }
 
-  selectSortOption(value) {
-    this.sortDropdown.select(value);
+  editProduct(productName, newName, newPrice, newQuantity) {
+    // Tìm dòng sản phẩm và click nút Edit
+    cy.contains('[data-testid="product-name-cell"]', productName)
+      .parents('[data-testid="product-item"]')
+      .find('[data-testid="edit-btn"]')
+      .click();
+    
+    // Sửa thông tin
+    this.txtProductName.clear().type(newName);
+    this.txtProductPrice.clear().type(newPrice);
+    if (newQuantity) {
+      this.txtProductQuantity.clear().type(newQuantity);
+    }
+    this.btnSubmit.click();
   }
+
 }
 
 export default new ProductPage();
