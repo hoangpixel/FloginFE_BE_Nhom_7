@@ -1,0 +1,61 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:file": "jest",
+    "test:file:cov": "jest --coverage",
+    "test:cov:full": "jest --coverage --coverageReporters=lcov --coverageReporters=text --collectCoverageFrom=\"src/**/*.{js,jsx}\" --collectCoverageFrom=\"!src/main.jsx\" --collectCoverageFrom=\"!src/vite-env.d.js\" --collectCoverageFrom=\"!src/**/*.d.js\" --collectCoverageFrom=\"!src/App.jsx\" --collectCoverageFrom=\"!src/router/**\" --collectCoverageFrom=\"!src/services/**\" --collectCoverageFrom=\"!src/pages/ProductsPage.jsx\"",    "test:e2e": "cypress run", 
+    "cy:open": "cypress open"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "prop-types": "^15.8.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
+    "@eslint/js": "^9.36.0",
+    "@tailwindcss/vite": "^4.1.17",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.6.0",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "autoprefixer": "^10.4.21",
+    "babel-jest": "^30.2.0",
+    "cypress": "^15.6.0",
+    "encoding": "^0.1.13",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.22",
+    "globals": "^16.4.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17",
+    "ts-jest": "^29.4.5",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.45.0",
+    "vite": "^7.1.7"
+  },
+  "pnpm": {
+    "allow-build": [
+      "cypress"
+    ]
+  }
+}

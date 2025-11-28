@@ -1,0 +1,52 @@
+name: Complete E2E Testing Pipeline (Login & Product)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      # 1. Tải code về
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Cài đặt pnpm (Bắt buộc phải có bước này nếu dùng pnpm)
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # 3. Cài đặt môi trường Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      # 4. Cài đặt thư viện (Dùng pnpm thay vì npm)
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5. Chạy TOÀN BỘ Test (Dùng lệnh script vừa thêm vào package.json)
+      - name: Run All Cypress Tests
+        run: pnpm run test:e2e
+
+      # 6. Xuất báo cáo (Sửa lại đường dẫn cho đúng context ./frontend)
+      - name: Upload Test Artifacts
+        if: always() 
+        uses: actions/upload-artifact@v4
+        with:
+          name: complete-test-reports
+          path: |
+            frontend/cypress/videos
+            frontend/cypress/screenshots
