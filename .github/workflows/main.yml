@@ -1,4 +1,4 @@
-name: Complete E2E Testing Pipeline (Login & Product)
+name: Complete E2E Testing Pipeline (Login, Product & Security)
 
 on:
   push:
@@ -37,8 +37,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5. Chạy TOÀN BỘ Test (Dùng lệnh script vừa thêm vào package.json)
-      - name: Run All Cypress Tests
+      # 5. Chạy TOÀN BỘ Test (Login, Product & Security)
+      - name: Run All Cypress E2E Tests
         run: pnpm run test:e2e
 
       # 6. Xuất báo cáo (Sửa lại đường dẫn cho đúng context ./frontend)
@@ -46,7 +46,7 @@ jobs:
         if: always() 
         uses: actions/upload-artifact@v4
         with:
-          name: complete-test-reports
+          name: e2e-test-reports
           path: |
             frontend/cypress/videos
             frontend/cypress/screenshots
