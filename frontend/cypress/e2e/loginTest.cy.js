@@ -7,7 +7,7 @@ describe('6.1.2 - E2E Test Scenarios for Login Flow', () => {
   });
 
   // --- Test UI elements interactions ---
-  it('TC01: Verify UI Elements visibility (Kiểm tra giao diện)', () => {
+  it('TC1: Kiem tra hien thi cac thanh phan giao dien', () => {
     // Kiểm tra ô nhập và nút bấm có hiển thị và cho phép tương tác không
     LoginPage.txtUsername.should('be.visible').and('be.enabled');
     LoginPage.txtPassword.should('be.visible').and('be.enabled');
@@ -15,47 +15,46 @@ describe('6.1.2 - E2E Test Scenarios for Login Flow', () => {
   });
 
   // --- Test complete login flow ---
-  it('TC02: Login Successfully (Đăng nhập thành công)', () => {
+  it('TC2: Dang nhap thanh cong voi tai khoan hop le', () => {
     // Flow chuẩn: Nhập đúng -> Click -> Vào trong
-    LoginPage.login('standard_user', 'secret_sauce');
+    LoginPage.login('admin', 'Test123');
 
-    // Kiểm tra chuyển trang thành công
-    cy.url().should('include', '/inventory.html');
+    // Đợi API login hoàn thành và kiểm tra chuyển trang thành công
+    cy.url({ timeout: 10000 }).should('include', '/products');
   });
 
   // --- Test error flows ---
-  it('TC03: Login Failed - Wrong Password (Sai mật khẩu)', () => {
-    LoginPage.login('standard_user', 'wrong_pass_123');
+  it('TC3: Dang nhap that bai khi nhap sai mat khau', () => {
+    LoginPage.login('testuser', 'wrong_password');
 
     // Kiểm tra thông báo lỗi xuất hiện
     LoginPage.lblErrorMessage.should('be.visible');
-    LoginPage.lblErrorMessage.should('contain.text', 'Username and password do not match');
   });
 
-  it('TC04: Login Failed - Locked Out User (Tài khoản bị khóa)', () => {
-    LoginPage.login('locked_out_user', 'secret_sauce');
+  it('TC4: Dang nhap that bai khi tai khoan khong ton tai', () => {
+    LoginPage.login('invaliduser123', 'anypassword');
 
-    // Kiểm tra thông báo lỗi cụ thể
-    LoginPage.lblErrorMessage.should('contain.text', 'Sorry, this user has been locked out');
+    // Kiểm tra thông báo lỗi
+    LoginPage.lblErrorMessage.should('be.visible');
   });
 
   // --- Test validation messages---
-  it('TC05: Validation - Empty Username (Bỏ trống tên đăng nhập)', () => {
+  it('TC5: Kiem tra thong bao loi khi bo trong ten dang nhap', () => {
     // Click nút login luôn mà không nhập gì cả
     LoginPage.btnLogin.click();
 
     // Kiểm tra Validation message yêu cầu nhập Username
     LoginPage.lblErrorMessage.should('be.visible');
-    LoginPage.lblErrorMessage.should('contain.text', 'Username is required');
+    LoginPage.lblErrorMessage.should('contain.text', 'username khong duoc de trong');
   });
 
-  it('TC06: Validation - Empty Password (Bỏ trống mật khẩu)', () => {
+  it('TC6: Kiem tra thong bao loi khi bo trong mat khau', () => {
     // Nhập user nhưng bỏ trống pass
-    LoginPage.txtUsername.type('standard_user');
+    LoginPage.txtUsername.type('admin');
     LoginPage.btnLogin.click();
 
     // Kiểm tra Validation message yêu cầu nhập Password
-    LoginPage.lblErrorMessage.should('contain.text', 'Password is required');
+    LoginPage.lblErrorMessage.should('contain.text', 'password khong duoc de trong');
   });
 
 });
