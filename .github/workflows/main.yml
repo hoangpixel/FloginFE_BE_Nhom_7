@@ -15,13 +15,34 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Cài đặt pnpm
+      # --- PHẦN 1: CẤU HÌNH JAVA CHO BACKEND ---
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'       # <--- Kiểm tra xem dự án bạn dùng Java 17 hay 21 để sửa
+          distribution: 'temurin'
+          cache: maven             # Tự động cache thư viện Maven cho nhanh
+
+      # --- PHẦN 2: CHẠY BACKEND (MAVEN) ---
+      - name: Start Spring Boot Backend
+        working-directory: ./backend # <--- Đảm bảo đúng tên thư mục chứa file pom.xml
+        run: |
+          # Build dự án (bỏ qua test unit của backend để tiết kiệm time)
+          mvn clean install -DskipTests
+          
+          # Chạy server Spring Boot dưới nền (&)
+          mvn spring-boot:run &
+          
+          # Đợi 30s để Server Java khởi động xong (Java khởi động lâu hơn Node)
+          echo "Waiting for Spring Boot to start..."
+          sleep 30
+
+      # --- PHẦN 3: CẤU HÌNH FRONTEND (NODEJS/PNPM) ---
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      # 3. Cài đặt Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -29,30 +50,18 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
 
-      # --- BƯỚC 1: KHỞI ĐỘNG BACKEND (Bắt buộc để test Login) ---
-      - name: Install & Start Backend
-        working-directory: ./backend   # <--- Đảm bảo tên thư mục đúng là 'backend'
-        run: |
-          pnpm install
-          pnpm start &                 # Chạy ngầm server Backend
-          echo "Backend is starting..."
-          sleep 15                     # Đợi 15 giây cho Backend lên hẳn
-
-      # --- BƯỚC 2: CÀI ĐẶT FRONTEND ---
       - name: Install Frontend Dependencies
         working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
-      # --- BƯỚC 3: CHẠY TEST (Đã sửa lệnh để tránh lỗi lặp script) ---
+      # --- PHẦN 4: CHẠY CYPRESS ---
       - name: Run All Cypress E2E Tests
         working-directory: ./frontend
-        # Giải thích lệnh:
-        # 1. 'dev': Tên lệnh chạy server frontend trong package.json (thường là vite)
-        # 2. 'http://localhost:5173': Đợi trang web lên
-        # 3. 'pnpm exec cypress run': Chạy thẳng Cypress (không qua script trung gian để tránh lỗi)
+        # Backend Java đã chạy ở trên rồi.
+        # Giờ chỉ cần start Frontend và test.
         run: npx start-server-and-test dev http://localhost:5173 "pnpm exec cypress run"
 
-      # 4. Xuất báo cáo kết quả
+      # 5. Xuất báo cáo
       - name: Upload Test Artifacts
         if: always() 
         uses: actions/upload-artifact@v4
