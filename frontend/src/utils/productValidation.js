@@ -10,7 +10,7 @@ export const VALID_CATEGORIES = [
     "OTHER"
 ];
 
-    export const validateProduct = (product) => {
+export const validateProduct = (product) => {
     const errors = {};
     const { name, price, quantity, description, category } = product;
 
@@ -26,9 +26,9 @@ export const VALID_CATEGORIES = [
 
     // --- 2. Validate Price ---
     if (price === undefined || price === null || String(price).trim() === '') {
-         errors.price = 'Gia san pham khong duoc de trong';
+        errors.price = 'Gia san pham khong duoc de trong';
     } else if (typeof price !== 'number' || isNaN(price)) {
-         errors.price = 'Gia san pham phai la so';
+        errors.price = 'Gia san pham phai la so';
     } else if (price <= 0) {
         errors.price = 'Gia san pham phai lon hon 0';
     } else if (price > MAX_PRICE) {

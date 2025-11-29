@@ -53,7 +53,7 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
 
     async function submit(e) {
         e.preventDefault();
-        
+
         if (hasErrors) {
             setTouched({
                 name: true,
@@ -75,8 +75,8 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
         focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500
         disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:shadow-none
         transition duration-150 ease-in-out
-        ${hasError 
-            ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500' 
+        ${hasError
+            ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
             : 'border-gray-300 text-gray-900'}
     `;
 
@@ -85,21 +85,21 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
     return (
         <div className="bg-white" data-testid="product-form-wrapper">
             <form onSubmit={submit} className="space-y-6" data-testid="product-form">
-                
+
                 {/* --- Field Name --- */}
                 <div>
                     <label htmlFor="pf-name" className={labelClass}>
                         Tên sản phẩm <span className="text-red-500">*</span>
                     </label>
                     <div className="mt-1 relative rounded-md shadow-sm">
-                        <input 
-                            id="pf-name" 
-                            data-testid="product-name" 
+                        <input
+                            id="pf-name"
+                            data-testid="product-name"
                             className={inputClass(shouldShow('name') && !!errors.name)}
-                            placeholder="Nhập tên sản phẩm (3–100 ký tự)" 
-                            value={form.name} 
-                            onChange={e => onChange('name', e.target.value)} 
-                            onBlur={() => onBlur('name')} 
+                            placeholder="Nhập tên sản phẩm (3–100 ký tự)"
+                            value={form.name}
+                            onChange={e => onChange('name', e.target.value)}
+                            onBlur={() => onBlur('name')}
                         />
                     </div>
                     {shouldShow('name') && errors.name && (
@@ -117,16 +117,16 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
                             Giá (VND) <span className="text-red-500">*</span>
                         </label>
                         <div className="mt-1 relative rounded-md shadow-sm">
-                            <input 
-                                id="pf-price" 
-                                data-testid="product-price" 
+                            <input
+                                id="pf-price"
+                                data-testid="product-price"
                                 className={inputClass(shouldShow('price') && !!errors.price)}
-                                type="number" 
-                                placeholder="0" 
-                                value={form.price} 
-                                onChange={e => onChange('price', Number(e.target.value))} 
-                                onBlur={() => onBlur('price')} 
-                                min={0} 
+                                type="number"
+                                placeholder="0"
+                                value={form.price}
+                                onChange={e => onChange('price', Number(e.target.value))}
+                                onBlur={() => onBlur('price')}
+                                min={0}
                             />
                         </div>
                         {shouldShow('price') && errors.price && (
@@ -140,20 +140,20 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
                             Số lượng <span className="text-red-500">*</span>
                         </label>
                         <div className="mt-1 relative rounded-md shadow-sm">
-                            <input 
-                                id="pf-qty" 
-                                data-testid="product-quantity" 
+                            <input
+                                id="pf-qty"
+                                data-testid="product-quantity"
                                 className={inputClass(shouldShow('quantity') && !!errors.quantity)}
-                                type="number" 
-                                placeholder="0" 
-                                value={form.quantity} 
-                                onChange={e => { 
-                                    const rawValue = e.target.value; 
-                                    const val = rawValue === '' ? 0 : Number(rawValue); 
-                                    onChange('quantity', val); 
-                                }} 
-                                onBlur={() => onBlur('quantity')} 
-                                min={0} 
+                                type="number"
+                                placeholder="0"
+                                value={form.quantity}
+                                onChange={e => {
+                                    const rawValue = e.target.value;
+                                    const val = rawValue === '' ? 0 : Number(rawValue);
+                                    onChange('quantity', val);
+                                }}
+                                onBlur={() => onBlur('quantity')}
+                                min={0}
                             />
                         </div>
                         {shouldShow('quantity') && errors.quantity && (
@@ -168,12 +168,12 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
                         Danh mục <span className="text-red-500">*</span>
                     </label>
                     <div className="mt-1">
-                        <select 
-                            id="pf-category" 
-                            data-testid="product-category" 
+                        <select
+                            id="pf-category"
+                            data-testid="product-category"
                             className={inputClass(shouldShow('category') && !!errors.category)}
-                            value={form.category} 
-                            onChange={e => onChange('category', e.target.value)} 
+                            value={form.category}
+                            onChange={e => onChange('category', e.target.value)}
                             onBlur={() => onBlur('category')}
                         >
                             <option value="">-- Chọn danh mục --</option>
@@ -192,15 +192,15 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
                         <span className="text-gray-400 font-normal ml-1">(Tối đa 500 ký tự)</span>
                     </label>
                     <div className="mt-1">
-                        <textarea 
-                            id="pf-desc" 
-                            data-testid="product-description" 
+                        <textarea
+                            id="pf-desc"
+                            data-testid="product-description"
                             className={inputClass(shouldShow('description') && !!errors.description)}
-                            placeholder="Nhập mô tả sản phẩm..." 
-                            value={form.description} 
-                            onChange={e => onChange('description', e.target.value)} 
-                            onBlur={() => onBlur('description')} 
-                            rows={4} 
+                            placeholder="Nhập mô tả sản phẩm..."
+                            value={form.description}
+                            onChange={e => onChange('description', e.target.value)}
+                            onBlur={() => onBlur('description')}
+                            rows={4}
                         />
                     </div>
                     {shouldShow('description') && errors.description && (
@@ -234,16 +234,16 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
                 {/* Actions */}
                 <div className="pt-5 border-t border-gray-200">
                     <div className="flex justify-end gap-3">
-                        <button 
-                            type="button" 
-                            onClick={onCancel} 
+                        <button
+                            type="button"
+                            onClick={onCancel}
                             className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             {/* FIX: Đổi 'Huỷ bỏ' hoặc 'Hủy' thành 'Huỷ' để khớp test case */}
                             Huỷ
                         </button>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             data-testid="submit-button"
                         >

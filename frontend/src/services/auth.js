@@ -32,8 +32,8 @@ export async function loginUser(body) {
         (status === 401
           ? 'Sai username hoac password' // Khớp logic PDF trang 6 (Authentication flow)
           : status === 400
-          ? 'Sai dinh dang username/password'
-          : 'Co loi xay ra. Thu lai sau.'),
+            ? 'Sai dinh dang username/password'
+            : 'Co loi xay ra. Thu lai sau.'),
     };
   }
 }

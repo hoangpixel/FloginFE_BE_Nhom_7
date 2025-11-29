@@ -42,13 +42,13 @@ describe('ProductForm Component Tests', () => {
     const ids = ['product-name', 'product-price', 'product-quantity', 'product-description', 'product-category', 'submit-button'];
     ids.forEach(id => expect(screen.getByTestId(id)).toBeInTheDocument());
   });
-  
+
   it('TC2: Nhap du lieu name & price', () => {
     renderCreate();
 
     fireEvent.change(screen.getByTestId('product-name'), { target: { value: 'Laptop Dell' } });
     fireEvent.change(screen.getByTestId('product-price'), { target: { value: '15000000' } });
-    
+
     expect(screen.getByTestId('product-name').value).toBe('Laptop Dell');
     expect(screen.getByTestId('product-price').value).toBe('15000000');
   });

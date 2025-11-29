@@ -34,7 +34,7 @@ public class AuthController {
 
     // Phân loại lỗi để map status code “đúng REST”
     String msg = res.getMessage();
-    if ("Username không tồn tại".equals(msg) || "Sai mật khẩu".equals(msg)) {
+    if ("Username khong ton tai".equals(msg) || "Sai mat khau".equals(msg)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res); // 401
     }
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);     // 400 (lỗi validate)
