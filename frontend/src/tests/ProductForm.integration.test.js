@@ -48,7 +48,7 @@ describe("ProductForm Integration Tests", () => {
     });
   });
 
-  test("TC2: Khong nhap form → hien thị loi & khong goi API", async () => {
+  test("TC2: Khong nhap form - hien thị loi & khong goi API", async () => {
     render(
       <ProductForm
         mode="create"
@@ -67,7 +67,7 @@ describe("ProductForm Integration Tests", () => {
     });
   });
 
-  test("TC3: Nhap gia khong hop le → bao loi", () => {
+  test("TC3: Nhap gia khong hop le - bao loi", () => {
     render(
       <ProductForm
         mode="create"
@@ -154,7 +154,7 @@ describe("ProductForm Integration Tests", () => {
     expect(screen.getByDisplayValue("Test desc")).toBeInTheDocument();
   });
 
-  test("TC7: Nhan Huy → goi onCancel", () => {
+  test("TC7: Nhan Huy - goi onCancel", () => {
     render(
       <ProductForm
         mode="create"
@@ -168,7 +168,7 @@ describe("ProductForm Integration Tests", () => {
     expect(mockCancel).toHaveBeenCalledTimes(1);
   });
 
-  test("TC8: Mo ta qua 500 ky tu → hien loi", () => {
+  test("TC8: Mo ta qua 500 ky tu - hien loi", () => {
     render(
       <ProductForm
         mode="create"
@@ -187,7 +187,7 @@ describe("ProductForm Integration Tests", () => {
     expect(screen.getByTestId("error-description")).toBeInTheDocument();
   });
 
-  test("TC9: Khong chon category → bao loi summary", async () => {
+  test("TC9: Khong chon category - bao loi summary", async () => {
   render(
     <ProductForm
       mode="create"

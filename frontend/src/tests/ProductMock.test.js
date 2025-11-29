@@ -3,12 +3,9 @@ import * as productService from '../services/product';
 jest.mock('../services/product');
 
 describe('Product Service Mock Tests', () => {
-  // Reset mock sau mỗi bài test để đảm bảo không bị trùng lặp số lần gọi
   afterEach(() => {
     jest.clearAllMocks();
   });
-
-  // a) Mock CRUD operations (Create, Read, Update, Delete)
 
   test('TC1: Mock - Get products (Read)', async () => {
     const mockResponse = {
@@ -69,8 +66,6 @@ describe('Product Service Mock Tests', () => {
     expect(result).toEqual(mockResponse);
   });
 
-  // b) Test failure scenarios (Test trường hợp lỗi)
-
   test('TC5: Mock - Create product - Failure (API Error)', async () => {
     const invalidProduct = { name: '', price: -100 };
     const errorMessage = 'Invalid product data';
@@ -79,7 +74,6 @@ describe('Product Service Mock Tests', () => {
 
     await expect(productService.createProduct(invalidProduct)).rejects.toThrow(errorMessage);
 
-    // c) Verify calls
     expect(productService.createProduct).toHaveBeenCalledTimes(1);
   });
 });
