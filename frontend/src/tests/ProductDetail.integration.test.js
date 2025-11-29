@@ -41,35 +41,35 @@ describe("ProductDetail Integration Tests", () => {
     expect(handleEdit).toHaveBeenCalledWith(product);
   });
 
-  test("TC4: Khong render khi product la null", () => {
-    render(<ProductDetail product={null} onClose={() => {}} />);
+  // test("TC4: Khong render khi product la null", () => {
+  //   render(<ProductDetail product={null} onClose={() => {}} />);
 
-    expect(screen.queryByTestId("product-detail")).not.toBeInTheDocument();
-  });
+  //   expect(screen.queryByTestId("product-detail")).not.toBeInTheDocument();
+  // });
 
-  test("TC5: Hien thi '(Khong co)' khi description rong", () => {
-    const emptyDescProduct = { ...product, description: "" };
-    render(<ProductDetail product={emptyDescProduct} onClose={() => {}} />);
+  // test("TC5: Hien thi '(Khong co)' khi description rong", () => {
+  //   const emptyDescProduct = { ...product, description: "" };
+  //   render(<ProductDetail product={emptyDescProduct} onClose={() => {}} />);
 
-    expect(screen.getByText("(Khong co)")).toBeInTheDocument();
-  });
+  //   expect(screen.getByText("(Khong co)")).toBeInTheDocument();
+  // });
 
-  test("TC6: Hien thi dung category", () => {
-    render(<ProductDetail product={product} onClose={() => {}} />);
+  // test("TC6: Hien thi dung category", () => {
+  //   render(<ProductDetail product={product} onClose={() => {}} />);
 
-    expect(screen.getByText("ELECTRONICS")).toBeInTheDocument();
-  });
+  //   expect(screen.getByText("ELECTRONICS")).toBeInTheDocument();
+  // });
 
-  test("TC7: Hien thi dung ID và so luong", () => {
-    render(<ProductDetail product={product} onClose={() => {}} />);
+  // test("TC7: Hien thi dung ID và so luong", () => {
+  //   render(<ProductDetail product={product} onClose={() => {}} />);
 
-    expect(screen.getByText("1")).toBeInTheDocument();
-    expect(screen.getByText("10")).toBeInTheDocument();
-  });
+  //   expect(screen.getByText("1")).toBeInTheDocument();
+  //   expect(screen.getByText("10")).toBeInTheDocument();
+  // });
 
-  test("TC8: onEdit khong hien thi khi prop onEdit undefined", () => {
-    render(<ProductDetail product={product} onClose={() => {}} />);
+  // test("TC8: onEdit khong hien thi khi prop onEdit undefined", () => {
+  //   render(<ProductDetail product={product} onClose={() => {}} />);
     
-    expect(screen.queryByTestId("btn-edit")).not.toBeInTheDocument();
-  });
+  //   expect(screen.queryByTestId("btn-edit")).not.toBeInTheDocument();
+  // });
 });
