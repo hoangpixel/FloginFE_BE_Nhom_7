@@ -129,7 +129,7 @@ cd frontend
 pnpm run dev
 ```
 
-#### Bước 3: Mở giao diện GUI
+### Bước 3: Mở giao diện GUI
 #### Cách 1: Mở giao diện GUI
 ```bash
 pnpm cy:open
@@ -233,12 +233,12 @@ FloginFE_BE_Nhom_7/
 ---
 
 ## 👥 Thành viên Nhóm 7
-| Thành viên | MASSV | Tỉ lệ đóng góp |
-|----------|------|-----------|
-| Phạm Minh Hoàng | `3123410114` | 25% | 
-| Lê Minh Huy | `3123410121` | 25% | 
-| Trịnh Việt Thắng | `3123410347` | 25% | 
-| Nguyễn Đức Đạt  | `3123410068` | 25% | 
+| STT | Họ và Tên | MSSV | Vai trò | Tỉ lệ đóng góp |
+|:---:|-----------|:----:|-------------------|:--------------:|
+| 1 | **Phạm Minh Hoàng** | `3123410114` | Leader | 25% |
+| 2 | **Lê Minh Huy** | `3123410121` | Tester | 25% |
+| 3 | **Trịnh Việt Thắng** | `3123410347` | Tester | 25% |
+| 4 | **Nguyễn Đức Đạt** | `3123410068` | Tester | 25% |
 ---
 
 ## © Bản quyền
