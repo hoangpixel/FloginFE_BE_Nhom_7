@@ -1,26 +1,29 @@
 package com.flogin.service;
 
-import com.flogin.dto.ProductRequest;
-import com.flogin.entity.Category;
-import com.flogin.entity.Product;
-import com.flogin.repository.ProductRepository;
+import java.util.Arrays;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.flogin.dto.ProductRequest;
+import com.flogin.entity.Category;
+import com.flogin.entity.Product;
+import com.flogin.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceMockTest {
@@ -37,7 +40,7 @@ class ProductServiceMockTest {
         Product mockProduct = new Product();
         mockProduct.setId(1L);
         mockProduct.setName("Laptop Dell");
-        mockProduct.setPrice(15000000); // Integer
+        mockProduct.setPrice(15000000);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(mockProduct));
 

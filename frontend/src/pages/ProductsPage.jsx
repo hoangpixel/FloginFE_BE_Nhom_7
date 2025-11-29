@@ -65,9 +65,6 @@ export default function ProductsPage() {
 
     // Gọi hàm fetchAll
     fetchAll();
-
-    // QUAN TRỌNG: Đã bỏ 'mode' ra khỏi dependency array
-    // Để khi bấm "Xem" (đổi mode), nó KHÔNG load lại API -> Không bị chớp màn hình
   }, [currentPage, refreshKey, searchTerm]);
 
   const handleSearch = (term) => {
