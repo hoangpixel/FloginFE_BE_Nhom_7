@@ -47,41 +47,35 @@ public class ProductControllerIntegrationTest {
     @MockBean
     private AuthUserRepository authUserRepository;
 
-    // --- CASE 1: GET ALL (Lấy danh sách) ---
     @Test
-    @DisplayName("GET /api/products - Lay danh sach san pham") 
+    @DisplayName("TC1: GET /api/products - Lay danh sach san pham") 
     void testGetAllProducts() throws Exception {
-
         Product laptop = new Product();
         laptop.setId(1L);
         laptop.setName("Laptop");
-        
+
         Product mouse = new Product();
         mouse.setId(2L);
         mouse.setName("Mouse");
 
         List<Product> listGia = Arrays.asList(laptop, mouse);
-
         when(productRepository.findAll()).thenReturn(listGia); 
 
         mockMvc.perform(get("/api/products")) 
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2))) 
             .andExpect(jsonPath("$[0].name", is("Laptop"))); 
-        
-        // 4. VERIFY (Kiểm tra tương tác)
+
         verify(productRepository, times(1)).findAll();
     }
-    
-    // --- CASE 2: GET ONE (Lấy chi tiết) ---
+
     @Test
-    @DisplayName("GET /api/products/{id} - Lay chi tiet san pham")
+    @DisplayName("TC2: GET /api/products/{id} - Lay chi tiet san pham")
     void testGetProductById() throws Exception {
 
         Product laptop = new Product();
         laptop.setId(1L);
         laptop.setName("Laptop Dell");
-
         when(productRepository.findById(1L)).thenReturn(Optional.of(laptop));
 
         mockMvc.perform(get("/api/products/1"))
@@ -91,9 +85,8 @@ public class ProductControllerIntegrationTest {
         verify(productRepository, times(1)).findById(1L);
     }
 
-    // --- CASE 3: CREATE (Tạo mới) ---
     @Test
-    @DisplayName("POST /api/products - Tao san pham moi") 
+    @DisplayName("TC3: POST /api/products - Tao san pham moi") 
     void testCreateProduct() throws Exception {
 
         ProductRequest requestData = new ProductRequest(); 
@@ -115,14 +108,12 @@ public class ProductControllerIntegrationTest {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.name", is("New Laptop")));
-            
-        // 5. VERIFY
+
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
-    // --- CASE 4: UPDATE (Cập nhật) ---
     @Test
-    @DisplayName("PUT /api/products/{id} - Cap nhat san pham")
+    @DisplayName("TC4: PUT /api/products/{id} - Cap nhat san pham")
     void testUpdateProduct() throws Exception {
 
         ProductRequest requestData = new ProductRequest();
@@ -153,15 +144,13 @@ public class ProductControllerIntegrationTest {
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
-    // --- CASE 5: DELETE (Xóa) ---
     @Test
-    @DisplayName("DELETE /api/products/{id} - Xoa san pham")
+    @DisplayName("TC5: DELETE /api/products/{id} - Xoa san pham")
     void testDeleteProduct() throws Exception {
-
         when(productRepository.existsById(1L)).thenReturn(true);
 
         mockMvc.perform(delete("/api/products/1"))
-            .andExpect(status().isNoContent()); // 204 No Content
+            .andExpect(status().isNoContent());
 
         verify(productRepository, times(1)).existsById(1L);
         verify(productRepository, times(1)).deleteById(1L);
