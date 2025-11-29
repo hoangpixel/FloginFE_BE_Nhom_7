@@ -11,15 +11,15 @@ const PAGE_SIZE = 5;
 
 export default function ProductsPage() {
   const nav = useNavigate();
-  const [fullList, setFullList] = useState([]); 
+  const [fullList, setFullList] = useState([]);
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [mode, setMode] = useState('list'); 
+  const [mode, setMode] = useState('list');
   const [current, setCurrent] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  // 1. STATE MỚI: Lưu từ khóa tìm kiếm
   const [searchTerm, setSearchTerm] = useState('');
 
   const user = useMemo(() => localStorage.getItem('username') ?? 'user', []);
@@ -27,32 +27,27 @@ export default function ProductsPage() {
   // 2. CẬP NHẬT LOGIC LỌC + PHÂN TRANG
   useEffect(() => {
     async function fetchAll() {
+      setLoading(true);
       try {
-        // Nếu đã có fullList (từ lần load đầu), có thể ko cần gọi API lại nếu chỉ search client-side.
-        // Tuy nhiên để đơn giản và đồng bộ với refreshKey, ta cứ gọi lại hoặc dùng fullList state.
-        // Ở đây mình gọi lại để đảm bảo dữ liệu mới nhất.
         const all = await getProducts();
         setFullList(all);
 
-        // --- BƯỚC LỌC (SEARCH/FILTER) ---
         let filtered = all;
         if (searchTerm) {
-            const lowerTerm = searchTerm.toLowerCase();
-            filtered = all.filter(p => 
-                p.name.toLowerCase().includes(lowerTerm) || 
-                p.category.toLowerCase().includes(lowerTerm)
-            );
+          const lowerTerm = searchTerm.toLowerCase();
+          filtered = all.filter(p =>
+            p.name.toLowerCase().includes(lowerTerm) ||
+            p.category.toLowerCase().includes(lowerTerm)
+          );
         }
 
-        // --- BƯỚC PHÂN TRANG SAU KHI LỌC ---
         const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
         setTotalPages(pages);
-        
-        // Reset về trang 1 nếu trang hiện tại vượt quá tổng số trang sau khi lọc
+
         let pageToLoad = currentPage;
         if (currentPage > pages) {
-             pageToLoad = 1; // Khi search thường reset về trang 1
-             setCurrentPage(1);
+          pageToLoad = 1;
+          setCurrentPage(1);
         }
 
         const start = (pageToLoad - 1) * PAGE_SIZE;
@@ -63,19 +58,21 @@ export default function ProductsPage() {
         setFullList([]);
         setItems([]);
         setTotalPages(1);
+      } finally {
+        setLoading(false);
       }
     }
 
-    if (mode === 'list') {
-      fetchAll();
-    }
-  // 3. Thêm searchTerm vào dependency để khi gõ nó tự lọc lại
-  }, [currentPage, mode, refreshKey, searchTerm]); 
+    // Gọi hàm fetchAll
+    fetchAll();
 
-  // Hàm xử lý khi gõ tìm kiếm
+    // QUAN TRỌNG: Đã bỏ 'mode' ra khỏi dependency array
+    // Để khi bấm "Xem" (đổi mode), nó KHÔNG load lại API -> Không bị chớp màn hình
+  }, [currentPage, refreshKey, searchTerm]);
+
   const handleSearch = (term) => {
-      setSearchTerm(term);
-      setCurrentPage(1); // Luôn reset về trang 1 khi bắt đầu tìm kiếm mới
+    setSearchTerm(term);
+    setCurrentPage(1);
   };
 
   function onLogout() {
@@ -92,8 +89,8 @@ export default function ProductsPage() {
       }
       setMode('list');
       setCurrent(null);
-      setRefreshKey(old => old + 1); 
-      if (mode === 'create') setCurrentPage(1); 
+      setRefreshKey(old => old + 1);
+      if (mode === 'create') setCurrentPage(1);
     } catch (error) {
       alert('Có lỗi xảy ra: ' + error.message);
     }
@@ -120,64 +117,122 @@ export default function ProductsPage() {
     }
   }
 
-  // ... (Các hàm startCreate, startEdit... giữ nguyên) ...
   function startCreate() { setCurrent(null); setMode('create'); }
   function startEdit(p) { setCurrent(p); setMode('edit'); }
   function startDetail(p) { setCurrent(p); setMode('detail'); }
   function backToList() { setMode('list'); setCurrent(null); }
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6" data-testid="products-page">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Products</h1>
-        <div className="flex items-center gap-3">
-          {mode === 'list' && (
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900" data-testid="products-page">
+      {/* --- HEADER --- */}
+      <header className="bg-white shadow-sm sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-indigo-600 text-white p-1.5 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+            <h1 className="text-xl font-bold text-gray-800 tracking-tight">Product Manager</h1>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+              </svg>
+              <span className="font-medium">{user}</span>
+            </div>
             <button
-              className="px-3 py-2 rounded bg-black text-white"
+              onClick={onLogout}
+              className="text-gray-500 hover:text-red-600 transition-colors duration-200 flex items-center gap-1 text-sm font-medium"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* --- MAIN CONTENT --- */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Title Section: Hiện khi ở List HOẶC Detail */}
+        {(mode === 'list' || mode === 'detail') && (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Danh sách sản phẩm</h2>
+              <p className="text-gray-500 mt-1">Quản lý kho hàng và thông tin sản phẩm của bạn.</p>
+            </div>
+            <button
+              className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm transition-all"
               onClick={startCreate}
               data-testid="add-product-btn"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
               Thêm sản phẩm
             </button>
+          </div>
+        )}
+
+        {/* --- CONTENT AREA --- */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden min-h-[400px]">
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+            </div>
+          ) : (
+            <div className="p-6">
+              
+              {/* Vẫn hiện ProductList khi mode là 'detail' để làm nền cho Popup */}
+              {(mode === 'list' || mode === 'detail') && (
+                <ProductList
+                  items={items}
+                  onView={startDetail}
+                  onEdit={startEdit}
+                  onDelete={onDelete}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={onPageChange}
+                  searchTerm={searchTerm}
+                  onSearchChange={handleSearch}
+                />
+              )}
+
+              {/* Form Create/Edit */}
+              {(mode === 'create' || mode === 'edit') && (
+                <div className="max-w-2xl mx-auto">
+                   <div className="mb-6 pb-4 border-b">
+                      <h3 className="text-lg font-bold text-gray-900">
+                        {mode === 'create' ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}
+                      </h3>
+                   </div>
+                  <ProductForm
+                    mode={mode === 'create' ? 'create' : 'edit'}
+                    categories={VALID_CATEGORIES}
+                    initial={mode === 'edit' ? current : null}
+                    onSave={handleSave}
+                    onCancel={backToList}
+                  />
+                </div>
+              )}
+
+              {/* Modal Detail nằm đè lên trên */}
+              {mode === 'detail' && (
+                <ProductDetail
+                  product={current}
+                  onClose={backToList}
+                  onEdit={(p) => startEdit(p)}
+                />
+              )}
+            </div>
           )}
-          <span className="text-sm text-gray-600">Hi, {user}</span>
-          <button className="px-3 py-1 border rounded" onClick={onLogout}>Logout</button>
         </div>
-      </div>
-
-      {mode === 'list' && (
-        <ProductList
-          items={items}
-          onView={startDetail}
-          onEdit={startEdit}
-          onDelete={onDelete}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-          // 4. TRUYỀN PROPS XUỐNG
-          searchTerm={searchTerm}
-          onSearchChange={handleSearch}
-        />
-      )}
-
-      {/* ... Phần Form và Detail giữ nguyên ... */}
-      {(mode === 'create' || mode === 'edit') && (
-        <ProductForm
-          mode={mode === 'create' ? 'create' : 'edit'}
-          categories={VALID_CATEGORIES}
-          initial={mode === 'edit' ? current : null}
-          onSave={handleSave}
-          onCancel={backToList}
-        />
-      )}
-
-      {mode === 'detail' && (
-        <ProductDetail
-          product={current}
-          onClose={backToList}
-          onEdit={(p) => startEdit(p)}
-        />
-      )}
+      </main>
     </div>
   );
 }
