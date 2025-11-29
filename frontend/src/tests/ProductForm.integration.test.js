@@ -4,7 +4,6 @@ Object.assign(global, { TextEncoder, TextDecoder });
 import React from "react";
 import { render, screen, fireEvent, waitFor} from "@testing-library/react";
 import "@testing-library/jest-dom";
-
 import ProductForm from "../components/ProductForm";
 
 describe("ProductForm Integration Tests", () => {
@@ -21,7 +20,6 @@ describe("ProductForm Integration Tests", () => {
   test("TC1: Tao san pham moi thanh cong", async () => {
     const resolved = Promise.resolve();
     mockSave.mockReturnValue(resolved);
-
     render(
       <ProductForm
         mode="create"
@@ -40,7 +38,6 @@ describe("ProductForm Integration Tests", () => {
     fireEvent.change(screen.getByTestId("product-quantity"), {
       target: { value: "10" },
     });
-
     fireEvent.click(screen.getByTestId("submit-button"));
 
     await waitFor(() => {
@@ -87,7 +84,6 @@ describe("ProductForm Integration Tests", () => {
 
   test("TC4: Update san phẩm thanh cong", async () => {
     mockSave.mockResolvedValue({});
-
     render(
       <ProductForm
         mode="edit"
@@ -107,7 +103,6 @@ describe("ProductForm Integration Tests", () => {
     fireEvent.change(screen.getByTestId("product-name"), {
       target: { value: "Laptop Gaming" },
     });
-
     fireEvent.click(screen.getByTestId("submit-button"));
 
     await waitFor(() => {
@@ -124,8 +119,8 @@ describe("ProductForm Integration Tests", () => {
         onCancel={mockCancel}
       />
     );
-
     const select = screen.getByTestId("product-category");
+
     fireEvent.change(select, { target: { value: "TOY" } });
 
     expect(select.value).toBe("TOY");
@@ -164,7 +159,8 @@ describe("ProductForm Integration Tests", () => {
       />
     );
 
-    fireEvent.click(screen.getByText("Huỷ"));
+    fireEvent.click(screen.getByText("Huy"));
+
     expect(mockCancel).toHaveBeenCalledTimes(1);
   });
 
@@ -177,8 +173,8 @@ describe("ProductForm Integration Tests", () => {
         onCancel={mockCancel}
       />
     );
-
     const longText = "a".repeat(600);
+    
     fireEvent.change(screen.getByTestId("product-description"), {
       target: { value: longText },
     });

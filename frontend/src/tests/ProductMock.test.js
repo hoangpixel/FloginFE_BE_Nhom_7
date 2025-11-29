@@ -16,7 +16,6 @@ describe('Product Service Mock Tests', () => {
       total: 2,
       page: 1
     };
-
     productService.getProducts.mockResolvedValue(mockResponse);
 
     const result = await productService.getProducts(1);
@@ -29,7 +28,6 @@ describe('Product Service Mock Tests', () => {
   test('TC2: Mock - Create product', async () => {
     const newProduct = { name: 'New Laptop', price: 20000000 };
     const mockCreatedProduct = { id: 3, ...newProduct };
-
     productService.createProduct.mockResolvedValue(mockCreatedProduct);
 
     const result = await productService.createProduct(newProduct);
@@ -43,7 +41,6 @@ describe('Product Service Mock Tests', () => {
     const updateId = 1;
     const updateData = { price: 16000000 };
     const mockUpdatedProduct = { id: 1, name: 'Laptop Dell', price: 16000000 };
-
     productService.updateProduct.mockResolvedValue(mockUpdatedProduct);
 
     const result = await productService.updateProduct(updateId, updateData);
@@ -56,7 +53,6 @@ describe('Product Service Mock Tests', () => {
   test('TC4: Mock - Delete product', async () => {
     const deleteId = 1;
     const mockResponse = { message: 'Product deleted successfully' };
-
     productService.deleteProduct.mockResolvedValue(mockResponse);
 
     const result = await productService.deleteProduct(deleteId);
@@ -69,7 +65,6 @@ describe('Product Service Mock Tests', () => {
   test('TC5: Mock - Create product - Failure (API Error)', async () => {
     const invalidProduct = { name: '', price: -100 };
     const errorMessage = 'Invalid product data';
-
     productService.createProduct.mockRejectedValue(new Error(errorMessage));
 
     await expect(productService.createProduct(invalidProduct)).rejects.toThrow(errorMessage);

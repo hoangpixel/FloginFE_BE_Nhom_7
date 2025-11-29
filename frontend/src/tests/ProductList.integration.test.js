@@ -23,6 +23,7 @@ describe("ProductList Component Tests", () => {
         );
 
         const rows = screen.getAllByTestId("product-item");
+
         expect(rows.length).toBe(2);
     });
 
@@ -142,6 +143,7 @@ describe("ProductList Component Tests", () => {
                 onPageChange={onPageChange}
             />
         );
+
         expect(screen.getByTestId('pagination-controls')).toBeInTheDocument();
         expect(screen.getByTestId('page-btn-1')).toBeInTheDocument();
         expect(screen.getByTestId('page-btn-2')).toBeInTheDocument();
@@ -161,6 +163,7 @@ describe("ProductList Component Tests", () => {
             />
         );
         fireEvent.click(screen.getByTestId('page-btn-2'));
+
         expect(onPageChange).toHaveBeenCalledWith(2);
     });
 
@@ -178,8 +181,11 @@ describe("ProductList Component Tests", () => {
             />
         );
         const prevBtn = screen.getByText(/Trang trước/i);
+
         expect(prevBtn).toBeDisabled();
+
         fireEvent.click(prevBtn);
+
         expect(onPageChange).not.toHaveBeenCalled();
     });
 
@@ -197,8 +203,11 @@ describe("ProductList Component Tests", () => {
             />
         );
         const nextBtn = screen.getByText(/Trang sau/i);
+
         expect(nextBtn).toBeDisabled();
+
         fireEvent.click(nextBtn);
+
         expect(onPageChange).not.toHaveBeenCalled();
     });
 
@@ -217,10 +226,13 @@ describe("ProductList Component Tests", () => {
         );
         const prevBtn = screen.getByText(/Trang trước/i);
         const nextBtn = screen.getByText(/Trang sau/i);
+
         expect(prevBtn).not.toBeDisabled();
         expect(nextBtn).not.toBeDisabled();
+
         fireEvent.click(prevBtn);
         fireEvent.click(nextBtn);
+        
         expect(onPageChange).toHaveBeenCalledWith(1);
         expect(onPageChange).toHaveBeenCalledWith(3);
     });

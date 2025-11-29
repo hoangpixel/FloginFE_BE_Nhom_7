@@ -3,7 +3,6 @@ import React from "react";
 import Login from "../components/Login";
 import "@testing-library/jest-dom";
 import * as authService from "../services/auth";
-// 1. Thêm import MemoryRouter
 import { MemoryRouter } from "react-router-dom"; 
 
 jest.mock("../services/auth");
@@ -20,7 +19,6 @@ describe("Login Mock Tests", () => {
         jest.clearAllMocks();
     });
 
-    // Helper function để render gọn hơn (đỡ phải viết MemoryRouter nhiều lần)
     const renderLogin = () => {
         return render(
             <MemoryRouter>
@@ -30,7 +28,8 @@ describe("Login Mock Tests", () => {
     };
 
     test("TC1: Render giao dien form ban dau", () => {
-        renderLogin(); // SỬA: Dùng hàm render có bọc Router
+        renderLogin();
+
         expect(screen.getByTestId("username-input")).toBeInTheDocument();
         expect(screen.getByTestId("password-input")).toBeInTheDocument();
         expect(screen.getByTestId("login-button")).toBeInTheDocument();
@@ -40,15 +39,19 @@ describe("Login Mock Tests", () => {
         renderLogin();
         const u = screen.getByTestId("username-input");
         const p = screen.getByTestId("password-input");
+
         fireEvent.change(u, { target: { value: "abc" } });
         fireEvent.change(p, { target: { value: "Abc123" } });
+
         expect(u.value).toBe("abc");
         expect(p.value).toBe("Abc123");
     });
 
     test("TC3: Hien thi loi khi submit form rong", async () => {
         renderLogin();
-        fireEvent.click(screen.getByTestId("login-button"));       
+
+        fireEvent.click(screen.getByTestId("login-button")); 
+
         await waitFor(() =>
             expect(screen.getByTestId("username-error")).toHaveTextContent(/username khong duoc de trong/i)
         );
@@ -57,9 +60,11 @@ describe("Login Mock Tests", () => {
 
     test("TC4: Loi client username khong hop le", async () => {
         renderLogin();
+
         fireEvent.change(screen.getByTestId("username-input"), { target: { value: "ab" } });
         fireEvent.change(screen.getByTestId("password-input"), { target: { value: "Abc123" } });
         fireEvent.click(screen.getByTestId("login-button"));
+
         await waitFor(() =>
             expect(screen.getByTestId("username-error")).toHaveTextContent(/it nhat 3 ky tu/i)
         );
@@ -68,9 +73,11 @@ describe("Login Mock Tests", () => {
 
     test("TC5: Loi client password khong hop le", async () => {
         renderLogin();
+
         fireEvent.change(screen.getByTestId("username-input"), { target: { value: "validUser" } });
         fireEvent.change(screen.getByTestId("password-input"), { target: { value: "abcdef" } }); 
         fireEvent.click(screen.getByTestId("login-button"));
+
         await waitFor(() =>
             expect(screen.getByTestId("username-error")).toHaveTextContent(/ca chu lan so/i)
         );
@@ -81,8 +88,8 @@ describe("Login Mock Tests", () => {
         authService.loginUser.mockResolvedValue({ 
             success: true, message: 'ok', token: 'token', username: 'user' 
         });
-
         renderLogin();
+        
         fireEvent.change(screen.getByTestId("username-input"), { target: { value: "testuser" } });
         fireEvent.change(screen.getByTestId("password-input"), { target: { value: "Test123" } });
         fireEvent.click(screen.getByTestId("login-button"));
@@ -96,9 +103,9 @@ describe("Login Mock Tests", () => {
     test("TC7: Hien thi trang thai Loading khi dang gui", async () => {
         authService.loginUser.mockImplementation(
             () => new Promise((res) => setTimeout(() => res({ success: true }), 200))
-        );
-        
-        renderLogin();       
+        );        
+        renderLogin();  
+
         fireEvent.change(screen.getByTestId("username-input"), { target: { value: "testuser" } });
         fireEvent.change(screen.getByTestId("password-input"), { target: { value: "Test123" } });
         fireEvent.click(screen.getByTestId("login-button"));
@@ -112,8 +119,8 @@ describe("Login Mock Tests", () => {
             success: false,
             message: "Sai username hoac password",
         });
+        renderLogin();  
 
-        renderLogin();     
         fireEvent.change(screen.getByTestId("username-input"), { target: { value: "testuser" } });
         fireEvent.change(screen.getByTestId("password-input"), { target: { value: "Test123" } });
         fireEvent.click(screen.getByTestId("login-button"));
@@ -130,9 +137,9 @@ describe("Login Mock Tests", () => {
             token: "fake-token",
             username: "testuser",
         });
-        
         jest.useFakeTimers();
-        renderLogin(); // Bọc Router
+        renderLogin();
+
         fireEvent.change(screen.getByTestId("username-input"), { target: { value: "testuser" } });
         fireEvent.change(screen.getByTestId("password-input"), { target: { value: "Test123" } });
         fireEvent.click(screen.getByTestId("login-button"));
@@ -140,8 +147,7 @@ describe("Login Mock Tests", () => {
         await waitFor(() =>
             expect(screen.getByTestId("login-message")).toHaveTextContent(/thanh cong|thành công/i)
         );
-        
-        // Tua thời gian để setTimeout(..., 500) chạy
+
         act(() => {
             jest.advanceTimersByTime(500); 
         });
@@ -149,6 +155,7 @@ describe("Login Mock Tests", () => {
         await waitFor(() =>
             expect(mockNavigate).toHaveBeenCalledWith("/products", { replace: true })
         );
+        
         jest.useRealTimers();
     });
 });
