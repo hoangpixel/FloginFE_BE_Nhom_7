@@ -40,7 +40,7 @@ public class AuthControllerMockTest {
     private AuthUserRepository authUserRepository;
 
     @Test
-    @DisplayName("TC1: Login thanh cong (200 OK)")
+    @DisplayName("TC1: Login thanh cong")
     void testLoginSuccess() throws Exception {
         LoginRequest loginData = new LoginRequest("testuser", "Test1234");
         LoginResponse mockResponse = new LoginResponse(true, "Success", "mock-token", "testuser"); 
@@ -57,7 +57,7 @@ public class AuthControllerMockTest {
     }
 
     @Test
-    @DisplayName("TC2: Login that bai - Sai mat khau (401)")
+    @DisplayName("TC2: Login that bai - Sai mat khau")
     void testLoginFailure_WrongPassword() throws Exception {
         LoginRequest loginData = new LoginRequest("testuser", "Test1234");
         LoginResponse mockResponse = new LoginResponse(false, "Sai mật khẩu", null, null); 
@@ -73,7 +73,7 @@ public class AuthControllerMockTest {
     }
 
     @Test
-    @DisplayName("TC3: Login that bai - Username khong ton tai (401)")
+    @DisplayName("TC3: Login that bai - Username khong ton tai")
     void testLoginFailure_UserNotFound() throws Exception {
         LoginRequest loginData = new LoginRequest("unknown", "Test1234");
         LoginResponse mockResponse = new LoginResponse(false, "Username không tồn tại", null, null); 
@@ -89,7 +89,7 @@ public class AuthControllerMockTest {
     }
 
     @Test
-    @DisplayName("TC4: Login that bai - Loi khac tu service (400)")
+    @DisplayName("TC4: Login that bai - Loi khac tu service")
     void testLoginFailure_OtherError() throws Exception {
         LoginRequest loginData = new LoginRequest("testuser", "Test1234");
         LoginResponse mockResponse = new LoginResponse(false, "Tài khoản bị khóa", null, null); 
@@ -105,7 +105,7 @@ public class AuthControllerMockTest {
     }
 
     @Test
-    @DisplayName("TC5: Validation Error - Username rong (400)")
+    @DisplayName("TC5: Validation Error - Username rong")
     void testLoginFailure_Validation() throws Exception {
         LoginRequest invalidData = new LoginRequest("", "Test1234");
 
