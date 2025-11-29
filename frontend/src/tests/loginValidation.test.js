@@ -60,6 +60,5 @@ describe('Login Validation Tests - validatePassword', () => {
     test('TC6: Password hop le - nen khong loi', () => {
         expect(validatePassword('password123')).toBe('');
     });
-    
 });
 

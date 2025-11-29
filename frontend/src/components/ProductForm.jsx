@@ -9,7 +9,7 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
         price: 0,
         quantity: 0,
         description: '',
-        category: categories[0] || 'ELECTRONICS',
+        category: categories[0],
     });
 
     const [touched, setTouched] = useState({});
@@ -22,7 +22,7 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
                 name: initial.name,
                 price: initial.price,
                 quantity: initial.quantity,
-                description: initial.description || '',
+                description: initial.description,
                 category: initial.category,
             });
         } else {
@@ -32,7 +32,7 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
                 price: 0,
                 quantity: 0,
                 description: '',
-                category: categories[0] || 'ELECTRONICS',
+                category: categories[0],
             });
         }
         setTouched({});
@@ -240,7 +240,7 @@ export default function ProductForm({ mode, categories, initial, onSave, onCance
                             className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             {/* FIX: Đổi 'Huỷ bỏ' hoặc 'Hủy' thành 'Huỷ' để khớp test case */}
-                            Huỷ
+                            Hủy
                         </button>
                         <button
                             type="submit"

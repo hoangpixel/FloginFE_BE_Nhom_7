@@ -159,7 +159,7 @@ describe("ProductForm Integration Tests", () => {
       />
     );
 
-    fireEvent.click(screen.getByText("Huy"));
+    fireEvent.click(screen.getByText("Hủy"));
 
     expect(mockCancel).toHaveBeenCalledTimes(1);
   });

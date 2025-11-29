@@ -236,4 +236,67 @@ describe("ProductList Component Tests", () => {
         expect(onPageChange).toHaveBeenCalledWith(1);
         expect(onPageChange).toHaveBeenCalledWith(3);
     });
+
+    test("TC14: Nhap tu khoa tim kiem goi onSearchChange voi gia tri dung", () => {
+        const mockOnSearchChange = jest.fn();
+        
+        render(
+            <ProductList 
+                items={mockProducts} 
+                onView={mockOnView} 
+                onEdit={mockOnEdit} 
+                onDelete={mockOnDelete} 
+                currentPage={1}
+                totalPages={3}
+                onPageChange={jest.fn()}
+                searchTerm=""
+                onSearchChange={mockOnSearchChange}
+            />
+        );
+
+        const searchInput = screen.getByTestId("search-input");
+
+        fireEvent.change(searchInput, { target: { value: "Iphone" } });
+
+        expect(mockOnSearchChange).toHaveBeenCalledWith("Iphone");
+    });
+
+test("TC15: Render khong crash khi items la null hoac undefined", () => {
+        render(
+            <ProductList 
+                items={null}
+                onView={mockOnView} 
+                onEdit={mockOnEdit} 
+                onDelete={mockOnDelete} 
+                currentPage={1}
+                totalPages={3}
+                onPageChange={jest.fn()}
+                searchTerm=""
+                onSearchChange={jest.fn()}
+            />
+        );
+        
+        const rows = screen.queryAllByTestId("product-item");
+        expect(rows.length).toBe(0);
+        expect(screen.getByText(/Chưa có sản phẩm/i)).toBeInTheDocument();
+    });
+
+    test("TC16: Hien thi thong bao 'Khong tim thay' khi search khong co ket qua", () => {
+        render(
+            <ProductList
+                items={[]} 
+                onView={mockOnView} 
+                onEdit={mockOnEdit} 
+                onDelete={mockOnDelete} 
+                currentPage={1}
+                totalPages={3}
+                onPageChange={jest.fn()}
+                onSearchChange={jest.fn()}
+                searchTerm="XYZ"
+            />
+        );
+
+        expect(screen.getByText(/Không tìm thấy sản phẩm nào khớp với "XYZ"/i)).toBeInTheDocument();
+        expect(screen.queryByText(/^Chưa có sản phẩm$/i)).toBeNull();
+    });
 });

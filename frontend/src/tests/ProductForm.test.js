@@ -92,21 +92,46 @@ describe('ProductForm Component Tests', () => {
     expect(screen.getByTestId('error-price')).toBeInTheDocument();
   });
 
-  it('TC7: Category missing hien thi loi category', async () => {
+  it('TC6: Edit mode prefill du lieu', () => {
+    const initial = {
+      id: 1,
+      name: 'Laptop Dell',
+      price: 15000000,
+      quantity: 10,
+      description: 'XPS 13',
+      category: 'FASHION'
+    };
+    renderEdit(initial);
+    expect(screen.getByTestId('product-name').value).toBe('Laptop Dell');
+    expect(screen.getByTestId('product-price').value).toBe('15000000');
+    expect(screen.getByTestId('product-quantity').value).toBe('10');
+    expect(screen.getByTestId('product-description').value).toBe('XPS 13');
+    expect(screen.getByTestId('product-category').value).toBe('FASHION');
+  });
+
+it('TC7: Category missing hien thi loi category', async () => {
     renderCreate();
     fireEvent.change(screen.getByTestId('product-name'), { target: { value: 'Valid' } });
     fireEvent.change(screen.getByTestId('product-price'), { target: { value: '1000' } });
     fireEvent.change(screen.getByTestId('product-quantity'), { target: { value: '1' } });
-    fireEvent.change(screen.getByTestId('product-category'), { target: { value: '' } });
+    
+    const categoryEl = screen.getByTestId('product-category');
+    fireEvent.change(categoryEl, { target: { value: '' } });
+    fireEvent.blur(categoryEl);
+
     fireEvent.click(screen.getByTestId('submit-button'));
   });
 
-  it('TC8: Description qua dai hien thi loi', async () => {
+it('TC8: Description qua dai hien thi loi', async () => {
     renderCreate();
     fireEvent.change(screen.getByTestId('product-name'), { target: { value: 'Valid Name' } });
     fireEvent.change(screen.getByTestId('product-price'), { target: { value: '1000' } });
     fireEvent.change(screen.getByTestId('product-quantity'), { target: { value: '1' } });
-    fireEvent.change(screen.getByTestId('product-description'), { target: { value: 'X'.repeat(501) } });
+    
+    const descEl = screen.getByTestId('product-description');
+    fireEvent.change(descEl, { target: { value: 'X'.repeat(501) } });
+    fireEvent.blur(descEl);
+
     fireEvent.click(screen.getByTestId('submit-button'));
     await screen.findByTestId('error-description');
     expect(screen.getByTestId('error-description')).toHaveTextContent('khong duoc vuot qua 500');
@@ -134,25 +159,8 @@ describe('ProductForm Component Tests', () => {
         onCancel={onCancel}
       />
     );
-    fireEvent.click(screen.getByRole('button', { name: /huỷ/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Hủy/i }));
     expect(onCancel).toHaveBeenCalled();
-  });
-
-  it('TC6: Edit mode prefill du lieu', () => {
-    const initial = {
-      id: 1,
-      name: 'Laptop Dell',
-      price: 15000000,
-      quantity: 10,
-      description: 'XPS 13',
-      category: 'FASHION'
-    };
-    renderEdit(initial);
-    expect(screen.getByTestId('product-name').value).toBe('Laptop Dell');
-    expect(screen.getByTestId('product-price').value).toBe('15000000');
-    expect(screen.getByTestId('product-quantity').value).toBe('10');
-    expect(screen.getByTestId('product-description').value).toBe('XPS 13');
-    expect(screen.getByTestId('product-category').value).toBe('FASHION');
   });
 
   it('TC11: Name > 100 ky tu bao loi', async () => {
