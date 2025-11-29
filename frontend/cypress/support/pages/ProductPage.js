@@ -60,7 +60,6 @@ class ProductPage {
   addProduct(name, price, quantity, category, description) {
     this.btnAddProduct.click();
     
-    // Đợi form hiển thị
     cy.get('[data-testid="product-form"]', { timeout: 5000 }).should('be.visible');
     
     this.txtProductName.type(name);
@@ -76,13 +75,12 @@ class ProductPage {
   }
 
   editProduct(productName, newName, newPrice, newQuantity) {
-    // Tìm dòng sản phẩm và click nút Edit
     cy.contains('[data-testid="product-name-cell"]', productName)
       .parents('[data-testid="product-item"]')
       .find('[data-testid="edit-btn"]')
       .click();
     
-    // Sửa thông tin
+
     this.txtProductName.clear().type(newName);
     this.txtProductPrice.clear().type(newPrice);
     if (newQuantity) {
