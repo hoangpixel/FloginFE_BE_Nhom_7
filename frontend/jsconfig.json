@@ -11,6 +11,6 @@
     "checkJs": false,
     "skipLibCheck": true
   },
-  "include": ["src", "lib/axios.js"],
+  "include": ["src", "src/services/axios.js"],
   "exclude": ["node_modules", "dist", "build"]
 }

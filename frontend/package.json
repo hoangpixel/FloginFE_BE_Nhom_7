@@ -13,7 +13,7 @@
     "test:file": "jest",
     "test:file:cov": "jest --coverage",
     "test:cov:full": "jest --coverage --coverageReporters=lcov --coverageReporters=text --collectCoverageFrom=\"src/**/*.{js,jsx}\" --collectCoverageFrom=\"!src/main.jsx\" --collectCoverageFrom=\"!src/vite-env.d.js\" --collectCoverageFrom=\"!src/**/*.d.js\" --collectCoverageFrom=\"!src/App.jsx\" --collectCoverageFrom=\"!src/router/**\" --collectCoverageFrom=\"!src/services/**\" --collectCoverageFrom=\"!src/pages/ProductsPage.jsx\"",
-    "test:e2e": "cypress run",
+    "cy:run": "cypress run",
     "cy:open": "cypress open",
     "test:e2e:ci": "start-server-and-test dev http://localhost:5173 cy:run"
   },
