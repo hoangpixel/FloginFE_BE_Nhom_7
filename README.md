@@ -129,7 +129,7 @@ cd frontend
 pnpm run dev
 ```
 
-### Bước 3: Mở giao diện GUI
+### Bước 3: Chạy Cypress
 #### Cách 1: Mở giao diện GUI
 ```bash
 pnpm cy:open
