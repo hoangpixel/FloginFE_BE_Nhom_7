@@ -129,7 +129,7 @@ cd frontend
 pnpm run dev
 ```
 
-### Bước 3: Mở giao diện GUI
+### Bước 3: Chạy Cypress
 #### Cách 1: Mở giao diện GUI
 ```bash
 pnpm cy:open
@@ -189,8 +189,8 @@ FloginFE_BE_Nhom_7/
 └── frontend/
        └── cypress/
        │       ├── e2e/
-       │       │   ├── loginTest.cy.js
-       │       │   ├── productTest.cy.js
+       │       │   ├── login.e2e.cy.js
+       │       │   ├── product.e2e.cy.js
        │       │   └── securityTest.cy.js
        │       └── support/
        │           │   └── pages/
