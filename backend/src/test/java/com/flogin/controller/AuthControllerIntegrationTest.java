@@ -39,7 +39,7 @@ class AuthControllerIntegrationTest {
     @MockBean private AuthUserRepository authUserRepository; 
 
     @Test
-    @DisplayName("a1) POST /api/auth/login - Thanh cong 200")
+    @DisplayName("TC1: POST /api/auth/login - Thanh cong")
     void testLoginSuccess() throws Exception {
         LoginRequest request = new LoginRequest("testuser", "Test123");
         LoginResponse mockResponse = new LoginResponse(true, "Dang nhap thanh cong", "token123", "testuser");
@@ -59,7 +59,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("a2) POST /api/auth/login - Sai mat khau 401")
+    @DisplayName("TC2: POST /api/auth/login - Sai mat khau")
     void testLoginUnauthorized() throws Exception {
         LoginRequest request = new LoginRequest("testuser", "Wrong123");
         when(authService.authenticate(any(LoginRequest.class)))
@@ -76,7 +76,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("a3) POST /api/auth/login - Username khong ton tai 401")
+    @DisplayName("TC3: POST /api/auth/login - Username khong ton tai")
     void testLoginUsernameNotFound() throws Exception {
         LoginRequest request = new LoginRequest("nouser", "Test123");
         when(authService.authenticate(any(LoginRequest.class)))
@@ -93,7 +93,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("a4) POST /api/auth/login - Sai dinh dang 400")
+    @DisplayName("TC4: POST /api/auth/login - Sai dinh dang")
     void testLoginBadRequestFromService() throws Exception {
         LoginRequest request = new LoginRequest("testuser", "Test123");
         when(authService.authenticate(any(LoginRequest.class)))
@@ -110,7 +110,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("a5) POST /api/auth/login - Username qua ngan 400 (validation)")
+    @DisplayName("TC5: POST /api/auth/login - Username qua ngan")
     void testLoginValidationErrorUsernameShort() throws Exception {
         LoginRequest invalid = new LoginRequest("ab", "Test123");
 
@@ -123,7 +123,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("a6) POST /api/auth/login - Password qua ngan 400 (validation)")
+    @DisplayName("TC6: POST /api/auth/login - Password qua ngan")
     void testLoginPasswordTooShortValidation() throws Exception {
         LoginRequest invalid = new LoginRequest("tester", "abc");
 
@@ -136,7 +136,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("b1) Response structure success: success, message, token, username")
+    @DisplayName("TC7: Response structure success: success, message, token, username")
     void testResponseStructureSuccess() throws Exception {
         when(authService.authenticate(any(LoginRequest.class)))
             .thenReturn(new LoginResponse(true, "Dang nhap thanh cong", "t123", "tester"));
@@ -153,7 +153,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("b2) Response structure failure: khong co token")
+    @DisplayName("TC8: Response structure failure: khong co token")
     void testResponseStructureFailure() throws Exception {
         when(authService.authenticate(any(LoginRequest.class)))
             .thenReturn(new LoginResponse(false, "Sai mat khau", null, null));
@@ -169,7 +169,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("c1) CORS Preflight OPTIONS /api/auth/login")
+    @DisplayName("TC9: CORS Preflight OPTIONS /api/auth/login")
     void testCorsPreflight() throws Exception {
 
         mockMvc.perform(options("/api/auth/login")
@@ -182,7 +182,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("c2) Actual POST có header Access-Control-Allow-Origin")
+    @DisplayName("TC10: Actual POST có header Access-Control-Allow-Origin")
     void testCorsOnActualPost() throws Exception {
         when(authService.authenticate(any(LoginRequest.class)))
             .thenReturn(new LoginResponse(true, "Dang nhap thanh cong", "tok", "tester"));

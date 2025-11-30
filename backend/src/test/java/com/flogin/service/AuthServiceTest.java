@@ -43,7 +43,7 @@ public class AuthServiceTest {
 
     // a) Test method authenticate() với các scenarios
     @Test
-    @DisplayName("TC1: Login thành công với credentials hợp lệ")
+    @DisplayName("TC1: Login thanh cong")
     void testLoginSuccess()
     {
         LoginRequest req = new LoginRequest("testuser","Test123");
@@ -56,13 +56,13 @@ public class AuthServiceTest {
         
         LoginResponse res = authService.authenticate(req);
         assertTrue(res.isSuccess());
-        assertEquals("Đăng nhập thành công", res.getMessage());
+        assertEquals("Dang nhap thanh cong", res.getMessage());
         assertEquals("testuser", res.getUsername());
         assertNotNull(res.getToken());
     }
 
     @Test
-    @DisplayName("TC2: Login thất bại với username sai")
+    @DisplayName("TC2: Login that bai voi username sai")
     void testLoginFailureUsername()
     {
         LoginRequest req = new LoginRequest("wronguser", "Pass123");
@@ -71,12 +71,12 @@ public class AuthServiceTest {
         
         LoginResponse res = authService.authenticate(req);
         assertFalse(res.isSuccess());
-        assertEquals("Username không tồn tại", res.getMessage());
+        assertEquals("Username khong ton tai", res.getMessage());
         assertNull(res.getToken());
     }
 
     @Test
-    @DisplayName("TC3: Login thất bại với password sai")
+    @DisplayName("TC3: Login that bai voi password sai")
     void testLoginFailurePassword()
     {
         LoginRequest req = new LoginRequest("testuser","Test123");
@@ -87,29 +87,29 @@ public class AuthServiceTest {
 
         LoginResponse res = authService.authenticate(req);
         assertFalse(res.isSuccess());
-        assertEquals("Sai mật khẩu", res.getMessage());
+        assertEquals("Sai mat khau", res.getMessage());
         assertNull(res.getToken());
     }
 
     @Test
-    @DisplayName("TC4: Login thất bại với lỗi Validation errors")
+    @DisplayName("TC4: Login that bai voi loi Validation errors")
     void testValidationerrors()
     {
         LoginRequest req = new LoginRequest("","Test123");
         
         @SuppressWarnings("unchecked")
         ConstraintViolation<LoginRequest> v = (ConstraintViolation<LoginRequest>) mock(ConstraintViolation.class);
-        when(v.getMessage()).thenReturn("Không được để trống username");
+        when(v.getMessage()).thenReturn("Khong duoc de trong username");
         when(vali.validate(req)).thenReturn(Set.of(v));
 
         LoginResponse res = authService.authenticate(req);
         assertFalse(res.isSuccess());
-        assertEquals("Không được để trống username", res.getMessage());
+        assertEquals("Khong duoc de trong username", res.getMessage());
         assertNull(res.getToken());
     }
 
     @Test
-    @DisplayName("TC5: Login thất bại do lỗi dữ liệu (Password Hash null)")
+    @DisplayName("TC5: Login that bai do loi du lieu (Password Hash null)")
     void testLoginFailure_HashNull() {
         LoginRequest req = new LoginRequest("testuser", "Test123");
         AuthUser user = new AuthUser(null, "testuser", null); 
@@ -119,12 +119,12 @@ public class AuthServiceTest {
         LoginResponse res = authService.authenticate(req);
 
         assertFalse(res.isSuccess());
-        assertEquals("Sai mật khẩu", res.getMessage()); 
+        assertEquals("Sai mat khau", res.getMessage()); 
     }
     
     // b) Test validation methods riêng lẻ
     @Test
-    @DisplayName("TC6: Test validation methods DTO hợp lệ")
+    @DisplayName("TC6: Test validation methods DTO hop le")
     void testDTO_HopLe()
     {
         LoginRequest req = new LoginRequest("mhoang","Mhoang123");
@@ -133,17 +133,17 @@ public class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("TC7: Test validation methods username rỗng")
+    @DisplayName("TC7: Test validation methods username rong")
     void testDTO_KhongHopLe_1()
     {
         LoginRequest req = new LoginRequest("","Mhoang123");
         @SuppressWarnings("unchecked")
         ConstraintViolation<LoginRequest> v = (ConstraintViolation<LoginRequest>) mock(ConstraintViolation.class);
-        when(v.getMessage()).thenReturn("Không được để trống username");
+        when(v.getMessage()).thenReturn("Khong duoc de trong username");
         when(vali.validate(req)).thenReturn(Set.of(v));
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> authService.validateRequest(req));
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
-        assertEquals("Không được để trống username", ex.getReason());
+        assertEquals("Khong duoc de trong username", ex.getReason());
     }
 }

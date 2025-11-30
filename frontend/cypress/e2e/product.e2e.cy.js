@@ -98,21 +98,17 @@ describe('6.2.2 - E2E Test Scenarios for Product CRUD & Filter', () => {
   });
 
   it('TC7: Kiem tra chuc nang tim kiem san pham', () => {
-    ProductPage.productTable.should('be.visible');
-    cy.wait(1000); 
-
     const targetName = 'Laptop Dell';
-    const partialName = 'Laptop Del';
-    const lastChar = 'l';
-    
+    ProductPage.productTable.should('be.visible');
+
     cy.get('[data-testid="search-input"]')
       .clear()
-      .invoke('val', partialName)
-      .type(lastChar);     
-    cy.get('[data-testid="search-input"]').should('have.value', targetName);
-    cy.wait(500);
+      .type(targetName) 
+      .should('have.value', targetName);
 
-    ProductPage.productItems.should('have.length', 1);
-    ProductPage.productItems.first().should('contain.text', targetName);
+    ProductPage.productItems.should('have.length', 1)
+      .first()
+      .should('contain.text', targetName);
   });
+
 });

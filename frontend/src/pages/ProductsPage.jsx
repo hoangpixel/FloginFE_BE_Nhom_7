@@ -18,54 +18,51 @@ export default function ProductsPage() {
   const [mode, setMode] = useState('list');
   const [current, setCurrent] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  
   const [loading, setLoading] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState('');
 
   const user = useMemo(() => localStorage.getItem('username') ?? 'user', []);
 
-  // 2. CẬP NHẬT LOGIC LỌC + PHÂN TRANG
   useEffect(() => {
-    async function fetchAll() {
+    async function fetchData() {
       setLoading(true);
       try {
         const all = await getProducts();
         setFullList(all);
-
-        let filtered = all;
-        if (searchTerm) {
-          const lowerTerm = searchTerm.toLowerCase();
-          filtered = all.filter(p =>
-            p.name.toLowerCase().includes(lowerTerm) ||
-            p.category.toLowerCase().includes(lowerTerm)
-          );
-        }
-
-        const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-        setTotalPages(pages);
-
-        let pageToLoad = currentPage;
-        if (currentPage > pages) {
-          pageToLoad = 1;
-          setCurrentPage(1);
-        }
-
-        const start = (pageToLoad - 1) * PAGE_SIZE;
-        setItems(filtered.slice(start, start + PAGE_SIZE));
-
       } catch (error) {
         console.error('Loi khi tai danh sach san pham', error);
         setFullList([]);
-        setItems([]);
-        setTotalPages(1);
       } finally {
         setLoading(false);
       }
     }
+    fetchData();
+  }, [refreshKey]);
 
-    // Gọi hàm fetchAll
-    fetchAll();
-  }, [currentPage, refreshKey, searchTerm]);
+  useEffect(() => {
+    let filtered = fullList;
+
+    if (searchTerm) {
+      const lowerTerm = searchTerm.toLowerCase();
+      filtered = fullList.filter(p =>
+        p.name.toLowerCase().includes(lowerTerm) ||
+        p.category.toLowerCase().includes(lowerTerm)
+      );
+    }
+
+    const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    setTotalPages(pages);
+
+    let pageToLoad = currentPage;
+    if (currentPage > pages) {
+       pageToLoad = 1;
+    }
+
+    const start = (pageToLoad - 1) * PAGE_SIZE;
+    setItems(filtered.slice(start, start + PAGE_SIZE));
+
+  }, [fullList, searchTerm, currentPage]);
 
   const handleSearch = (term) => {
     setSearchTerm(term);
