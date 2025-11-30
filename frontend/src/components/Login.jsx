@@ -121,7 +121,7 @@ export default function Login() {
         
         {/* Footer decoration */}
         <div className="bg-gray-50 p-4 text-center border-t border-gray-100">
-          <p className="text-xs text-gray-400">© 2025 Product Management System</p>
+          <p className="text-xs text-gray-400">© 2025 Flogin Project - Nhóm 7. Faculty of Information Technology, Saigon University.</p>
         </div>
       </div>
     </div>
