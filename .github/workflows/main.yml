@@ -72,6 +72,10 @@ jobs:
         working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
+      - name: Install Cypress Binary explicitly
+        working-directory: ./frontend
+        run: npx cypress install
+
       # --- 6. CHẠY CYPRESS ---
       - name: Run All Cypress E2E Tests
         working-directory: ./frontend
