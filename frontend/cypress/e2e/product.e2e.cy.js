@@ -83,20 +83,13 @@ describe('6.2.2 - E2E Test Scenarios for Product CRUD & Filter', () => {
   it('TC6: Kiem tra phan trang san pham', () => {
     cy.get('body').then($body => {
       if ($body.find('[data-testid="pagination-controls"]').length > 0) {
-        cy.get('[data-testid="pagination-controls"]').should('be.visible');
-        
-        
-        cy.get('[data-testid="page-btn-1"]').should('have.class', 'bg-indigo-50');
 
-      
+        cy.get('[data-testid="pagination-controls"]').should('be.visible');
+        cy.get('[data-testid="page-btn-1"]').should('have.class', 'bg-indigo-50');
         cy.get('[data-testid="page-btn-2"]').click();
         cy.wait(500); 
-
-        
         cy.get('[data-testid="page-btn-2"]').should('have.class', 'bg-indigo-50');
         cy.get('[data-testid="page-btn-1"]').should('not.have.class', 'bg-indigo-50');
-
-      
         cy.contains('button', 'Trang trước').should('not.be.disabled');
       } else {
         cy.log('Không đủ dữ liệu để test phân trang (cần > 5 items)');
@@ -104,4 +97,22 @@ describe('6.2.2 - E2E Test Scenarios for Product CRUD & Filter', () => {
     });
   });
 
+  it('TC7: Kiem tra chuc nang tim kiem san pham', () => {
+    ProductPage.productTable.should('be.visible');
+    cy.wait(1000); 
+
+    const targetName = 'Laptop Dell';
+    const partialName = 'Laptop Del';
+    const lastChar = 'l';
+    
+    cy.get('[data-testid="search-input"]')
+      .clear()
+      .invoke('val', partialName)
+      .type(lastChar);     
+    cy.get('[data-testid="search-input"]').should('have.value', targetName);
+    cy.wait(500);
+
+    ProductPage.productItems.should('have.length', 1);
+    ProductPage.productItems.first().should('contain.text', targetName);
+  });
 });

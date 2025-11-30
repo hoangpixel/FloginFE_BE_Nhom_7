@@ -51,6 +51,9 @@ class ProductPage {
     return cy.get('[data-testid="submit-button"]');
   }
 
+  get txtSearch() {
+    return cy.get('[data-testid="search-input"]');
+  }
   // --- 2. Actions ---
 
   visit() {

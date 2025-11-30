@@ -3,8 +3,8 @@ INSERT IGNORE INTO auth (id, password_hash, username) VALUES
 
 
 INSERT IGNORE INTO products (id, name, price, quantity, category, description) VALUES 
-(1, 'Laptop Dell', 15000000, 10, 'ELECTRONICS', 'Laptop Dell XPS 13 inch, RAM 16GB'),
+(1, 'Bánh ướt lòng gà', 35000, 4, 'FOOD', 'Bánh ướt lòng gà Trang Đà Lạt'),
 (2, 'Mouse Logitech', 200000, 50, 'ELECTRONICS', 'Chuột không dây silent'),
 (3, 'Iphone 15', 25000000, 5, 'ELECTRONICS', 'Iphone 15 Pro Max 256GB Titanium'),
 (4, 'Áo thun Basic', 150000, 100, 'FASHION', 'Áo thun cotton 100% co dãn'),
-(5, 'Bánh ướt lòng gà', 35000, 4, 'FOOD', 'Bánh ướt lòng gà Trang Đà Lạt');
+(5, 'Laptop Dell', 15000000, 10, 'ELECTRONICS', 'Laptop Dell XPS 13 inch, RAM 16GB');
