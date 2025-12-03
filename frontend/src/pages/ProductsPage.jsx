@@ -18,7 +18,7 @@ export default function ProductsPage() {
   const [mode, setMode] = useState('list');
   const [current, setCurrent] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  
+
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -56,7 +56,7 @@ export default function ProductsPage() {
 
     let pageToLoad = currentPage;
     if (currentPage > pages) {
-       pageToLoad = 1;
+      pageToLoad = 1;
     }
 
     const start = (pageToLoad - 1) * PAGE_SIZE;
@@ -152,7 +152,7 @@ export default function ProductsPage() {
 
       {/* --- MAIN CONTENT --- */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+
         {/* Title Section: Hiện khi ở List HOẶC Detail */}
         {(mode === 'list' || mode === 'detail') && (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
@@ -181,7 +181,7 @@ export default function ProductsPage() {
             </div>
           ) : (
             <div className="p-6">
-              
+
               {/* Vẫn hiện ProductList khi mode là 'detail' để làm nền cho Popup */}
               {(mode === 'list' || mode === 'detail') && (
                 <ProductList
@@ -200,11 +200,11 @@ export default function ProductsPage() {
               {/* Form Create/Edit */}
               {(mode === 'create' || mode === 'edit') && (
                 <div className="max-w-2xl mx-auto">
-                   <div className="mb-6 pb-4 border-b">
-                      <h3 className="text-lg font-bold text-gray-900">
-                        {mode === 'create' ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}
-                      </h3>
-                   </div>
+                  <div className="mb-6 pb-4 border-b">
+                    <h3 className="text-lg font-bold text-gray-900">
+                      {mode === 'create' ? 'Tạo sản phẩm mới' : 'Cập nhật sản phẩm'}
+                    </h3>
+                  </div>
                   <ProductForm
                     mode={mode === 'create' ? 'create' : 'edit'}
                     categories={VALID_CATEGORIES}
@@ -230,3 +230,4 @@ export default function ProductsPage() {
     </div>
   );
 }
+// End of ProductsPage.jsx
