@@ -22,7 +22,7 @@ Bài Tập Lớn - Kiểm Thử Phần Mềm
 
 ---
 
-## 🍃 1. Hướng dẫn chạy Backend (Spring Boot)
+##  1. Hướng dẫn chạy Backend (Spring Boot)
 ###  Bước 1: Sử dụng **XAMPP** khởi động chạy với **Apache** và **MySQL** có port lần lượt là **8080** và **3306**
 
 ### Bước 2: Điều hướng vào thư mục **Backend** (ưu tiên chạy trên terminal của JavaSE-21)
@@ -38,31 +38,11 @@ mvn -q clean package
 ###  Bước 4: Khởi chạy server, server sẽ tự động tạo database tên là **flogin** và tự động thêm 2 bảng **auth** và **products**
 ```bash
 mvn spring-boot:run
-### Bật HTTPS (tuỳ chọn cho dev)
-
-1) Tạo keystore tự ký (Windows PowerShell):
-
-```powershell
-$pwd = ConvertTo-SecureString -String "changeit" -Force -AsPlainText
-New-SelfSignedCertificate -DnsName "localhost" -CertStoreLocation Cert:\LocalMachine\My | Out-Null
-$cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -like "*CN=localhost*" } | Select-Object -First 1
-Export-PfxCertificate -Cert $cert -FilePath "D:\Nam_Ba\Nam_ba_ki_1\KTPM\Project2\code\FloginFE_BE_Nhom_7\backend\src\main\resources\keystore.p12" -Password $pwd
-```
-
-2) Chạy backend với profile `https`:
-
-```powershell
-Push-Location "D:\Nam_Ba\Nam_ba_ki_1\KTPM\Project2\code\FloginFE_BE_Nhom_7\backend"; mvn spring-boot:run -Dspring-boot.run.profiles=https; Pop-Location
-```
-
-3) Truy cập API qua `https://localhost:8443/...`.
-
-Lưu ý: Đây là chứng chỉ tự ký nên trình duyệt sẽ hiển thị cảnh báo. Khi chạy HTTPS, header HSTS (Strict-Transport-Security) đã được bật qua `SecurityHeadersFilter` sẽ có hiệu lực.
 ```
 
 ---
 
-## ⚛️ 2. Hướng dẫn chạy Frontend (Vite + React)
+##  2. Hướng dẫn chạy Frontend (Vite + React)
 Dự án sử dụng **pnpm** để quản lý package.
 ###  Bước 1: Điều hướng vào thư mục **Frontend**
 ```bash
@@ -81,9 +61,9 @@ pnpm run dev
 
 ---
 
-## 🧪 3. Hướng dẫn Kiểm thử (Testing)
+##  3. Hướng dẫn Kiểm thử (Testing)
 
-# 🔬 A. Frontend Unit Test (Jest)
+#  A. Frontend Unit Test (Jest)
 ###  Chạy test 1 file cụ thể
 ```bash
 pnpm test:file "tên_file"
@@ -106,7 +86,7 @@ start "" ".\\coverage\\lcov-report\\index.html"
 
 ---
 
-# 🔎 B. Backend Unit Test (JUnit + JaCoCo)
+#  B. Backend Unit Test (JUnit + JaCoCo)
 ###  Chạy test cho 1 file cụ thể
 ```bash
 mvn -Dtest="tên file test" test
@@ -124,7 +104,7 @@ start "" ".\\target\\site\\jacoco\\index.html"
 
 ---
 
-# 🛠 C. End-to-End Testing (Cypress)
+#  C. End-to-End Testing (Cypress)
 ### Bước 1: Cài đặt Cypress
 ```bash
 cd frontend
