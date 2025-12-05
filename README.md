@@ -38,6 +38,26 @@ mvn -q clean package
 ###  Bước 4: Khởi chạy server, server sẽ tự động tạo database tên là **flogin** và tự động thêm 2 bảng **auth** và **products**
 ```bash
 mvn spring-boot:run
+### Bật HTTPS (tuỳ chọn cho dev)
+
+1) Tạo keystore tự ký (Windows PowerShell):
+
+```powershell
+$pwd = ConvertTo-SecureString -String "changeit" -Force -AsPlainText
+New-SelfSignedCertificate -DnsName "localhost" -CertStoreLocation Cert:\LocalMachine\My | Out-Null
+$cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -like "*CN=localhost*" } | Select-Object -First 1
+Export-PfxCertificate -Cert $cert -FilePath "D:\Nam_Ba\Nam_ba_ki_1\KTPM\Project2\code\FloginFE_BE_Nhom_7\backend\src\main\resources\keystore.p12" -Password $pwd
+```
+
+2) Chạy backend với profile `https`:
+
+```powershell
+Push-Location "D:\Nam_Ba\Nam_ba_ki_1\KTPM\Project2\code\FloginFE_BE_Nhom_7\backend"; mvn spring-boot:run -Dspring-boot.run.profiles=https; Pop-Location
+```
+
+3) Truy cập API qua `https://localhost:8443/...`.
+
+Lưu ý: Đây là chứng chỉ tự ký nên trình duyệt sẽ hiển thị cảnh báo. Khi chạy HTTPS, header HSTS (Strict-Transport-Security) đã được bật qua `SecurityHeadersFilter` sẽ có hiệu lực.
 ```
 
 ---

@@ -41,9 +41,10 @@ describe('7.2 - E2E Test Scenarios for Security Testing', () => {
   });
 
   it('TC4: Kiem tra cac Security Headers', () => {
+    const apiBase = Cypress.env('API_BASE') || 'http://localhost:8080';
     cy.request({
       method: 'GET',
-      url: 'http://localhost:8080/api/products',
+      url: `${apiBase}/api/products`,
       failOnStatusCode: false
     }).then((response) => {
       
@@ -59,10 +60,11 @@ describe('7.2 - E2E Test Scenarios for Security Testing', () => {
   });
 
   it('TC5: Thu CSRF (khong co token se that bai)', () => {
+    const apiBase = Cypress.env('API_BASE') || 'http://localhost:8080';
     // Giả lập gửi form POST không có CSRF token đến endpoint login
     cy.request({
       method: 'POST',
-      url: 'http://localhost:8080/api/auth/login',
+      url: `${apiBase}/api/auth/login`,
       body: { username: 'admin', password: '123456' },
       failOnStatusCode: false,
       headers: { 'Content-Type': 'application/json' }
@@ -75,7 +77,8 @@ describe('7.2 - E2E Test Scenarios for Security Testing', () => {
   });
 
   it('TC6: Thu bypass xac thuc vao /products khi chua dang nhap', () => {
-    cy.visit('http://localhost:5173/products');
+    const feBase = Cypress.env('FE_BASE') || 'http://localhost:5173';
+    cy.visit(`${feBase}/products`);
     // Frontend nên chuyển hướng hoặc hiển thị thông báo yêu cầu đăng nhập
     cy.url().should('include', '/login');
   });
