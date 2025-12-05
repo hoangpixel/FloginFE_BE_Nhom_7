@@ -92,18 +92,20 @@ jobs:
             frontend/cypress/videos
             frontend/cypress/screenshots 
 
+# ... (phần trên giữ nguyên) ...
+
   # CD
   deploy-production:
     name: CD - Deploy to Production
-    needs: e2e-tests # Chỉ chạy khi E2E Test đã PASSED
+    needs: e2e-tests
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' # Chỉ deploy khi code ở nhánh main
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 1. Setup môi trường để Build bản Release
+      # 1. Setup môi trường
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -111,40 +113,43 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
+      # --- SỬA Ở ĐÂY: ĐƯA CÀI ĐẶT PNPM LÊN TRƯỚC ---
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      # 2. Build Backend (Tạo file .jar để chạy thật)
+      # --- SAU ĐÓ MỚI SETUP NODE (VÌ CẦN PNPM ĐỂ CACHE) ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm' # Lúc này đã có pnpm rồi nên không lỗi nữa
+          cache-dependency-path: '**/pnpm-lock.yaml' # Thêm dòng này cho chắc cú đường dẫn
+
+      # 2. Build Backend
       - name: Build Backend Production Artifact
         working-directory: ./backend
-        run: mvn clean package -DskipTests # Build ra file .jar (bỏ qua test vì đã test ở trên rồi)
+        run: mvn clean package -DskipTests
 
-      # 3. Build Frontend (Tạo folder dist/ để đưa lên host)
+      # 3. Build Frontend
       - name: Build Frontend Production Artifact
         working-directory: ./frontend
         run: |
           pnpm install --frozen-lockfile
           pnpm run build
 
-      # 4. Giả lập Deploy (Quan trọng để báo cáo)
+      # 4. Giả lập Deploy
       - name: Simulate Deployment Process
         run: |
           echo "🚀 Starting deployment to Production Server..."
           echo "✅ Backend Artifact (JAR) found."
           echo "✅ Frontend Build (Dist) found."
           echo "🔄 Copying files to /var/www/html/..."
-          sleep 5 # Giả vờ đợi deploy
+          sleep 5
           echo "🎉 Deployment Successful! Application is live."
 
-      # 5. Lưu trữ sản phẩm đã Build (Artifacts) - Minh chứng cho Continuous Delivery
+      # 5. Lưu trữ sản phẩm
       - name: Upload Production Artifacts
         uses: actions/upload-artifact@v4
         with:
