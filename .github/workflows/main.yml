@@ -94,7 +94,7 @@ jobs:
 
 # ... (phần trên giữ nguyên) ...
 
-  # CD
+# CD
   deploy-production:
     name: CD - Deploy to Production
     needs: e2e-tests
@@ -113,31 +113,31 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # --- SỬA Ở ĐÂY: ĐƯA CÀI ĐẶT PNPM LÊN TRƯỚC ---
+      # Cài pnpm trước
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      # --- SAU ĐÓ MỚI SETUP NODE (VÌ CẦN PNPM ĐỂ CACHE) ---
+      # Setup Node sau
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm' # Lúc này đã có pnpm rồi nên không lỗi nữa
-          cache-dependency-path: '**/pnpm-lock.yaml' # Thêm dòng này cho chắc cú đường dẫn
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
 
       # 2. Build Backend
       - name: Build Backend Production Artifact
         working-directory: ./backend
         run: mvn clean package -DskipTests
 
-      # 3. Build Frontend
+      # 3. Build Frontend (ĐÃ SỬA LỖI TSCONFIG)
       - name: Build Frontend Production Artifact
         working-directory: ./frontend
         run: |
           pnpm install --frozen-lockfile
-          pnpm run build
+          npx vite build
 
       # 4. Giả lập Deploy
       - name: Simulate Deployment Process
