@@ -55,7 +55,6 @@ class ProductPage {
     return cy.get('[data-testid="search-input"]');
   }
   // --- 2. Actions ---
-
   visit() {
     cy.visit('http://localhost:5173/products');
   }
@@ -82,8 +81,6 @@ class ProductPage {
       .parents('[data-testid="product-item"]')
       .find('[data-testid="edit-btn"]')
       .click();
-    
-
     this.txtProductName.clear().type(newName);
     this.txtProductPrice.clear().type(newPrice);
     if (newQuantity) {

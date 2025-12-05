@@ -14,28 +14,22 @@ describe('6.1.2 - E2E Test Scenarios for Login Flow', () => {
 
   it('TC2: Dang nhap thanh cong voi tai khoan hop le', () => {
     LoginPage.login('admin', 'Test123');
-
     cy.url({ timeout: 10000 }).should('include', '/products');
   });
 
  
   it('TC3: Dang nhap that bai khi nhap sai mat khau', () => {
     LoginPage.login('testuser', 'wrong_password');
-
-
     LoginPage.lblErrorMessage.should('be.visible');
   });
 
   it('TC4: Dang nhap that bai khi tai khoan khong ton tai', () => {
     LoginPage.login('invaliduser123', 'anypassword');
-
-    
     LoginPage.lblErrorMessage.should('be.visible');
   });
 
   
   it('TC5: Kiem tra thong bao loi khi bo trong ten dang nhap', () => {
-    
     LoginPage.btnLogin.click();
     LoginPage.lblErrorMessage.should('be.visible');
     LoginPage.lblErrorMessage.should('contain.text', 'username khong duoc de trong');

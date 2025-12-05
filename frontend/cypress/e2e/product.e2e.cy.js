@@ -6,21 +6,16 @@ describe('6.2.2 - E2E Test Scenarios for Product CRUD & Filter', () => {
   beforeEach(() => {
     cy.session('admin-session', () => {
         cy.clearCookies();
-        cy.clearLocalStorage();
-        
+        cy.clearLocalStorage();  
         LoginPage.visit();
         LoginPage.login('admin', 'Test123');
-        
         cy.url({ timeout: 10000 }).should('include', '/products');
     });
-
-
     cy.visit('http://localhost:5173/products');
     cy.wait(1000); 
   });
 
   afterEach(() => {
-    
     cy.url().then(url => {
       if (!url.includes('/products')) {
         cy.visit('http://localhost:5173/products');
@@ -36,7 +31,6 @@ describe('6.2.2 - E2E Test Scenarios for Product CRUD & Filter', () => {
   it('TC2: Them san pham moi thanh cong', () => {
     const productName = 'Test Product ' + Date.now();
     ProductPage.addProduct(productName, '100000', '10', 'ELECTRONICS', 'Mo ta san pham test');
-
     ProductPage.productTable.should('be.visible');
     cy.get('[data-testid="product-form"]').should('not.exist');
   });
@@ -50,18 +44,15 @@ describe('6.2.2 - E2E Test Scenarios for Product CRUD & Filter', () => {
   it('TC4: Cap nhat thong tin san pham thanh cong', () => {
     const oldName = 'Product to Update ' + Date.now();
     const newName = 'Updated Product ' + Date.now();
-    
     ProductPage.addProduct(oldName, '100000', '10', 'ELECTRONICS', 'Mo ta');
     ProductPage.productTable.should('be.visible');
     cy.wait(500); 
     
 
     cy.get('[data-testid="product-item"]').first().find('[data-testid="edit-btn"]').click();
-    
     ProductPage.txtProductName.clear().type(newName);
     ProductPage.txtProductPrice.clear().type('200000');
     ProductPage.btnSubmit.click();
-
     ProductPage.productTable.should('be.visible');
     cy.get('[data-testid="product-form"]').should('not.exist');
   });
@@ -83,7 +74,6 @@ describe('6.2.2 - E2E Test Scenarios for Product CRUD & Filter', () => {
   it('TC6: Kiem tra phan trang san pham', () => {
     cy.get('body').then($body => {
       if ($body.find('[data-testid="pagination-controls"]').length > 0) {
-
         cy.get('[data-testid="pagination-controls"]').should('be.visible');
         cy.get('[data-testid="page-btn-1"]').should('have.class', 'bg-indigo-50');
         cy.get('[data-testid="page-btn-2"]').click();
