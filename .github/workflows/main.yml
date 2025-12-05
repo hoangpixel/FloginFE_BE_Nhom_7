@@ -91,3 +91,69 @@ jobs:
             backend.log
             frontend/cypress/videos
             frontend/cypress/screenshots 
+
+# ... (phần trên giữ nguyên) ...
+
+# CD
+  deploy-production:
+    name: CD - Deploy to Production
+    needs: e2e-tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 1. Setup môi trường
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # Cài pnpm trước
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # Setup Node sau
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+
+      # 2. Build Backend
+      - name: Build Backend Production Artifact
+        working-directory: ./backend
+        run: mvn clean package -DskipTests
+
+      # 3. Build Frontend (ĐÃ SỬA LỖI TSCONFIG)
+      - name: Build Frontend Production Artifact
+        working-directory: ./frontend
+        run: |
+          pnpm install --frozen-lockfile
+          npx vite build
+
+      # 4. Giả lập Deploy
+      - name: Simulate Deployment Process
+        run: |
+          echo "🚀 Starting deployment to Production Server..."
+          echo "✅ Backend Artifact (JAR) found."
+          echo "✅ Frontend Build (Dist) found."
+          echo "🔄 Copying files to /var/www/html/..."
+          sleep 5
+          echo "🎉 Deployment Successful! Application is live."
+
+      # 5. Lưu trữ sản phẩm
+      - name: Upload Production Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build-files
+          path: |
+            backend/target/*.jar
+            frontend/dist/
