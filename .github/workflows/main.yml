@@ -108,11 +108,20 @@ jobs:
   # ====================================================
   # JOB 2: CD - DEPLOY (Chỉ đóng gói sản phẩm cuối)
   # ====================================================
+# ... (Phần e2e-tests ở trên giữ nguyên không đổi) ...
+
+  # ====================================================
+  # JOB 2: CD - DEPLOY (Đóng gói & Đẩy lên GitHub Pages)
+  # ====================================================
   deploy-production:
     name: CD - Deploy to Production
-    needs: e2e-tests # Chỉ chạy khi toàn bộ Test ở trên XANH
+    needs: e2e-tests
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    
+    # QUAN TRỌNG: Cấp quyền ghi để GitHub Actions đẩy code vào nhánh gh-pages
+    permissions:
+      contents: write 
 
     steps:
       - name: Checkout Code
@@ -137,29 +146,28 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
 
-      # 1. Build Backend (File chạy thật, không cần test lại)
+      # 1. Build Backend (Vẫn build để lấy file jar nộp báo cáo)
       - name: Build Backend Production Artifact
         working-directory: ./backend
         run: mvn clean package -DskipTests
 
-      # 2. Build Frontend (Dùng vite build để bypass lỗi typescript nếu có)
+      # 2. Build Frontend
       - name: Build Frontend Production Artifact
         working-directory: ./frontend
         run: |
           pnpm install --frozen-lockfile
           npx vite build
 
-      # 3. Giả lập Deploy
-      - name: Simulate Deployment Process
+      # 3. Giả lập Deploy (Vẫn giữ để chứng minh hiểu quy trình Server)
+      - name: Simulate Deployment to Enterprise Server
         run: |
-          echo "🚀 Starting deployment to Production Server..."
-          echo "✅ Backend Artifact (JAR) found."
-          echo "✅ Frontend Build (Dist) found."
-          echo "🔄 Copying files to /var/www/html/..."
-          sleep 5
-          echo "🎉 Deployment Successful! Application is live."
+          echo "🚀 Starting deployment to Private Server..."
+          echo "✅ Copying Backend .jar to /var/www/backend..."
+          echo "✅ Copying Frontend /dist to /var/www/html..."
+          sleep 2
+          echo "🎉 Internal Deployment Successful!"
 
-      # 4. Lưu trữ sản phẩm "để bán"
+      # 4. Upload Artifacts (Vẫn giữ để lấy file nộp)
       - name: Upload Production Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -167,3 +175,10 @@ jobs:
           path: |
             backend/target/*.jar
             frontend/dist/
+
+      # --- 5. BƯỚC MỚI: DEPLOY THẬT LÊN GITHUB PAGES ---
+      - name: 🚀 Deploy Frontend to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: frontend/dist # Thư mục chứa web sau khi build
+          branch: gh-pages      # Đẩy vào nhánh riêng tên là gh-pages
