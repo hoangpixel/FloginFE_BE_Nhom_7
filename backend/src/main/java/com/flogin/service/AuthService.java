@@ -52,14 +52,14 @@ public class AuthService {
 
     AuthUser user = repo.findByUsername(req.getUsername()).orElse(null);
     if (user == null) {
-      return new LoginResponse(false, "Username không tồn tại", null, null);
+      return new LoginResponse(false, "Username khong ton tai", null, null);
     }
 
     if (!matches(req.getPassword(), user.getPasswordHash())) {
-      return new LoginResponse(false, "Sai mật khẩu", null, null);
+      return new LoginResponse(false, "Sai mat khau", null, null);
     }
 
     String token = UUID.randomUUID().toString();
-    return new LoginResponse(true, "Đăng nhập thành công", token, user.getUsername());
+    return new LoginResponse(true, "Dang nhap thanh cong", token, user.getUsername());
   }
 }
