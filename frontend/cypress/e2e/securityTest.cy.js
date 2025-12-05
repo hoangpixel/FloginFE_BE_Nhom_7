@@ -49,10 +49,35 @@ describe('7.2 - E2E Test Scenarios for Security Testing', () => {
       
       expect([200, 401, 403]).to.include(response.status);
 
-      if (response.headers['x-content-type-options']) {
+      // Assert common security headers
       expect(response.headers['x-content-type-options']).to.eq('nosniff');
-      }
+      expect(response.headers['x-frame-options']).to.eq('DENY');
+      expect(response.headers['content-security-policy']).to.contain("default-src 'self'");
+      // HSTS only effective over HTTPS, but header presence is checked
+      expect(response.headers['strict-transport-security']).to.contain('max-age');
     });
+  });
+
+  it('TC5: Thu CSRF (khong co token se that bai)', () => {
+    // Giả lập gửi form POST không có CSRF token đến endpoint login
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:8080/api/auth/login',
+      body: { username: 'admin', password: '123456' },
+      failOnStatusCode: false,
+      headers: { 'Content-Type': 'application/json' }
+    }).then((response) => {
+      // Ứng dụng hiện không bật CSRF filter; yêu cầu: xác minh không xảy ra thay đổi trạng thái ngoài ý muốn
+      // Ít nhất phải trả về 200/400/401, không được set-cookie phiên nếu thất bại
+      expect([200, 400, 401]).to.include(response.status);
+      expect(response.headers['set-cookie'] || '').to.not.contain('SESSION');
+    });
+  });
+
+  it('TC6: Thu bypass xac thuc vao /products khi chua dang nhap', () => {
+    cy.visit('http://localhost:5173/products');
+    // Frontend nên chuyển hướng hoặc hiển thị thông báo yêu cầu đăng nhập
+    cy.url().should('include', '/login');
   });
 
 });
