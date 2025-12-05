@@ -80,7 +80,7 @@ jobs:
 
       - name: Run Frontend Unit Tests & Coverage
         working-directory: ./frontend
-        run: pnpm test -- --coverage
+        run: pnpm run test:cov:full
 
       # --- D. CHẠY E2E TESTS ---
       - name: Install Cypress Binary explicitly
